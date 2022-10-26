@@ -8,6 +8,7 @@
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
+#include "Box2D/Box2D/Box2D.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -64,6 +65,14 @@ bool Player::Update()
 
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 		vel = b2Vec2(speed, -GRAVITY_Y);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
+
+		//float impulse = pbody->body->GetMass() * 10;
+		//pbody->body->ApplyLinearImpulse({ +impulse * 50, 0 }, { 0,0 }, true);
+		vel = b2Vec2(0, -20);
+		
 	}
 
 	//Set the velocity of the pbody of the player
