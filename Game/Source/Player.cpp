@@ -67,11 +67,11 @@ bool Player::Update()
 		vel = b2Vec2(speed, -GRAVITY_Y);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) {
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 
 		//float impulse = pbody->body->GetMass() * 10;
 		//pbody->body->ApplyLinearImpulse({ +impulse * 50, 0 }, { 0,0 }, true);
-		pbody->body->ApplyForce(b2Vec2(0, 50), pbody->body->GetWorldCenter(), false );
+		pbody->body->ApplyForce(b2Vec2(0, -7000), pbody->body->GetWorldCenter(), true );
 		//vel = b2Vec2(pbody->body->GetLinearVelocity().x, -20);
 		
 	}
