@@ -71,7 +71,8 @@ bool Player::Update()
 
 		//float impulse = pbody->body->GetMass() * 10;
 		//pbody->body->ApplyLinearImpulse({ +impulse * 50, 0 }, { 0,0 }, true);
-		vel = b2Vec2(pbody->body->GetLinearVelocity().x, -20);
+		pbody->body->ApplyForce(b2Vec2(0, 50), pbody->body->GetWorldCenter(), false );
+		//vel = b2Vec2(pbody->body->GetLinearVelocity().x, -20);
 		
 	}
 
