@@ -67,15 +67,24 @@ bool Player::Update()
 		vel = b2Vec2(speed, -GRAVITY_Y);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && pbody->body->GetLinearVelocity().y == 0) {
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && pbody->body->GetLinearVelocity().y == 0) {
 
 		//Aplico una fuerza para intentar aplicar una acceleración al objeto
 		//Opción 1
-		pbody->body->ApplyForce(b2Vec2(0, -7000), pbody->body->GetWorldCenter(), true );  //Puede ser que sea tan pocho por el peso del pbody o la gravedad
+		pbody->body->ApplyForce(b2Vec2(0, -700000), pbody->body->GetWorldCenter(), true );  //Puede ser que sea tan pocho por el peso del pbody o la gravedad
 		//Opción 2
 		//vel = b2Vec2(pbody->body->GetLinearVelocity().x, -1000);
+		//Opción 3
+		//position.y -= vel.y * dt;
 		
 	}
+
+	if (app->input->GetKey(SDL_SCANCODE_LALT) == KEY_DOWN) {
+
+		pbody->body->ApplyForceToCenter(b2Vec2(1500000, 0), true);
+		
+	}
+
 
 	//Set the velocity of the pbody of the player
 	pbody->body->SetLinearVelocity(vel);
