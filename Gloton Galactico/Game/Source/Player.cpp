@@ -48,6 +48,7 @@ bool Player::Start() {
 
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
+	jumpFxId = app->audio->LoadFx("Assets/Audio/Fx/Laser-Sound-Effect.ogg");
 
 	return true;
 }
@@ -89,6 +90,7 @@ bool Player::Update()
 
 		
 		numJumps++;
+		app->audio->PlayFx(jumpFxId);
 
 	}
 
