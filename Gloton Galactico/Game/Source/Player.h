@@ -40,6 +40,8 @@ private:
 
 	int pickCoinFxId;
 
+	int numJumps;
+
 };
 
 #endif // __PLAYER_H__

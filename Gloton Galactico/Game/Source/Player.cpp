@@ -76,8 +76,8 @@ bool Player::Update()
 		vel = b2Vec2(speed, -GRAVITY_Y);
 	}
 
-	//SAlto
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && pbody->body->GetLinearVelocity().y == 0) {
+	//Salto
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && numJumps <= 2) {
 
 		//Aplico una fuerza para intentar aplicar una acceleración al objeto
 		//Opción 1
@@ -87,6 +87,18 @@ bool Player::Update()
 		//Opción 3
 		//position.y -= vel.y * dt;
 
+		
+		numJumps++;
+
+	}
+
+	if (numJumps == 3)
+	{
+		//Detectar si el jugador está tocando el suelo
+		if (pbody->body->GetLinearVelocity().y == 0)
+		{
+			numJumps = 0;
+		}
 	}
 
 	//Dash
