@@ -28,7 +28,7 @@ enum class ColliderType {
 	ITEM,
 	PLATFORM, 
 	UNKNOWN
-	// ..
+	
 };
 
 // Small class to return to other modules to track position and rotation of physics bodies
