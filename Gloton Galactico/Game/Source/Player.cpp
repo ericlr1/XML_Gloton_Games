@@ -86,7 +86,7 @@ bool Player::Update()
 		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 
 			//Fuerza de salto
-			salto = -20;
+			salto = -22;
 
 			on_floor = false;
 			numJumps++;
