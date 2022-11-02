@@ -50,6 +50,9 @@ bool Player::Start() {
 	pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
 	jumpFxId = app->audio->LoadFx("Assets/Audio/Fx/Laser-Sound-Effect.ogg");
 
+	//initialize parameters
+	numJumps = 0;
+
 	return true;
 }
 
@@ -77,14 +80,18 @@ bool Player::Update()
 		vel = b2Vec2(speed, -GRAVITY_Y);
 	}
 
-	//Salto
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && numJumps <= 2 ) {
-		
-		//Fuerza de salto
-		salto = -20;
-				
-		numJumps++;
-		app->audio->PlayFx(jumpFxId);
+	if (numJumps < 2)
+	{
+		//Salto
+		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+
+			//Fuerza de salto
+			salto = -20;
+
+			on_floor = false;
+			numJumps++;
+			app->audio->PlayFx(jumpFxId);
+		}
 	}
 
 	if (salto < 0)
@@ -93,10 +100,11 @@ bool Player::Update()
 		salto++;
 	}
 
-	if (numJumps >= 3)
+	if (on_floor)
 	{
 		numJumps = 0;
 	}
+	
 
 	//Dash-Provisional
 	/*if (app->input->GetKey(SDL_SCANCODE_LALT) == KEY_DOWN) {
@@ -127,24 +135,16 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 	// L07 DONE 7: Detect the type of collision
 
-	if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::PLATFORM)
-	{
-		on_floor = true;
-	}
-	
-
-
-
-
 	switch (physB->ctype)
 	{
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
 		app->audio->PlayFx(pickCoinFxId);
-		
 		break;
 	case ColliderType::PLATFORM:
 		LOG("Collision PLATFORM");
+		on_floor = true;
+
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
