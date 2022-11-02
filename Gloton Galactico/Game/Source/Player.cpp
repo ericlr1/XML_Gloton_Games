@@ -78,37 +78,32 @@ bool Player::Update()
 	}
 
 	//Salto
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && numJumps <= 2) {
-
-		//Aplico una fuerza para intentar aplicar una acceleración al objeto
-		//Opción 1
-		pbody->body->ApplyForce(b2Vec2(0, -700000), pbody->body->GetWorldCenter(), true);  //Puede ser que sea tan pocho por el peso del pbody o la gravedad
-		//Opción 2
-		//vel = b2Vec2(pbody->body->GetLinearVelocity().x, -1000);
-		//Opción 3
-		//position.y -= vel.y * dt;
-
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && numJumps <= 2 ) {
 		
+		//Fuerza de salto
+		salto = -20;
+				
 		numJumps++;
 		app->audio->PlayFx(jumpFxId);
-
 	}
 
-	if (numJumps == 3)
+	if (salto < 0)
 	{
-		//Detectar si el jugador está tocando el suelo
-		if (pbody->body->GetLinearVelocity().y == 0)
-		{
-			numJumps = 0;
-		}
+		vel.y = salto;
+		salto++;
 	}
 
-	//Dash
-	if (app->input->GetKey(SDL_SCANCODE_LALT) == KEY_DOWN) {
+	if (numJumps >= 3)
+	{
+		numJumps = 0;
+	}
+
+	//Dash-Provisional
+	/*if (app->input->GetKey(SDL_SCANCODE_LALT) == KEY_DOWN) {
 
 		pbody->body->ApplyForceToCenter(b2Vec2(1500000, 0), true);
 
-	}
+	}*/
 
 	//Set the velocity of the pbody of the player
 	pbody->body->SetLinearVelocity(vel);
@@ -132,20 +127,30 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 	// L07 DONE 7: Detect the type of collision
 
-	switch (physB->ctype)
+	if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::PLATFORM)
 	{
-		case ColliderType::ITEM:
-			LOG("Collision ITEM");
-			app->audio->PlayFx(pickCoinFxId);
-			break;
-		case ColliderType::PLATFORM:
-			LOG("Collision PLATFORM");
-			break;
-		case ColliderType::UNKNOWN:
-			LOG("Collision UNKNOWN");
-			break;
+		on_floor = true;
 	}
 	
+
+
+
+
+	switch (physB->ctype)
+	{
+	case ColliderType::ITEM:
+		LOG("Collision ITEM");
+		app->audio->PlayFx(pickCoinFxId);
+		
+		break;
+	case ColliderType::PLATFORM:
+		LOG("Collision PLATFORM");
+		break;
+	case ColliderType::UNKNOWN:
+		LOG("Collision UNKNOWN");
+		break;
+	}
+
 
 
 }

@@ -41,7 +41,11 @@ private:
 	int pickCoinFxId;
 	int jumpFxId;
 
-	int numJumps;
+	int numJumps = 0;
+	bool is_jumping;
+	bool on_floor;
+
+	int salto;
 
 };
 
