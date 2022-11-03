@@ -64,6 +64,7 @@ bool Player::Start() {
 
 	//initialize parameters
 	numJumps = 0;
+	godMode = false;
 
 	currentAnimation = &baseAnimation;
 
@@ -80,29 +81,85 @@ bool Player::Update()
 
 	int speed = 5; 
 	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y); 
+	//God Mode
+	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
+		godMode = !godMode;
+		numJumps = 0;
 
-	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
-	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-		//
-	}
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-		//
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		vel = b2Vec2(-speed, -GRAVITY_Y);
-		currentAnimation = &baseAnimation;
-	}
 
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-		vel = b2Vec2(speed, -GRAVITY_Y);
-	}
-
-	if (position.x > 400 && position.x < 3382)
-		app->render->camera.x = -position.x + 400;
-
-	if (numJumps < 2)
+	if (godMode == false)
 	{
+
+
+		//L02: DONE 4: modify the position of the player using arrow keys and render the texture
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+			//
+		}
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+			//
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+			vel = b2Vec2(-speed, -GRAVITY_Y);
+			currentAnimation = &baseAnimation;
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+			vel = b2Vec2(speed, -GRAVITY_Y);
+		}
+
+		if (position.x > 400 && position.x < 3382)
+			app->render->camera.x = -position.x + 400;
+
+		if (numJumps < 2)
+		{
+			//Salto
+			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+
+				//Fuerza de salto
+				salto = -22;
+
+				on_floor = false;
+				numJumps++;
+				app->audio->PlayFx(jumpFxId);
+			}
+		}
+
+		if (salto < 0)
+		{
+			vel.y = salto;
+			salto++;
+		}
+
+		if (on_floor)
+		{
+			numJumps = 0;
+		}
+	}
+	
+	if(godMode == true)
+	{
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+			//
+		}
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+			//
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+			vel = b2Vec2(-speed, -GRAVITY_Y);
+			currentAnimation = &baseAnimation;
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+			vel = b2Vec2(speed, -GRAVITY_Y);
+		}
+
+		if (position.x > 400 && position.x < 3382)
+			app->render->camera.x = -position.x + 400;
+
 		//Salto
 		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 
@@ -113,17 +170,12 @@ bool Player::Update()
 			numJumps++;
 			app->audio->PlayFx(jumpFxId);
 		}
-	}
 
-	if (salto < 0)
-	{
-		vel.y = salto;
-		salto++;
-	}
-
-	if (on_floor)
-	{
-		numJumps = 0;
+		if (salto < 0)
+		{
+			vel.y = salto;
+			salto++;
+		}
 	}
 	
 
