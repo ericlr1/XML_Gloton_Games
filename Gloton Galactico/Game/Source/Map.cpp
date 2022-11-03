@@ -34,11 +34,11 @@ bool Map::Awake(pugi::xml_node& config)
 
 void Map::Draw()
 {
-    if (mapLoaded == false)
+    if(mapLoaded == false)
         return;
 
     /*
-    // L04: DONE 6: Iterate all tilesets and draw all their
+    // L04: DONE 6: Iterate all tilesets and draw all their 
     // images in 0,0 (you should have only one tileset for now)
 
     ListItem<TileSet*>* tileset;
@@ -137,15 +137,15 @@ bool Map::CleanUp()
     LOG("Unloading map");
 
     // L04: DONE 2: Make sure you clean up any memory allocated from tilesets/map
-    ListItem<TileSet*>* item;
-    item = mapData.tilesets.start;
+	ListItem<TileSet*>* item;
+	item = mapData.tilesets.start;
 
-    while (item != NULL)
-    {
-        RELEASE(item->data);
-        item = item->next;
-    }
-    mapData.tilesets.Clear();
+	while (item != NULL)
+	{
+		RELEASE(item->data);
+		item = item->next;
+	}
+	mapData.tilesets.Clear();
 
     // L05: DONE 2: clean up all layer data
     // Remove all layers
@@ -169,13 +169,13 @@ bool Map::Load()
     pugi::xml_document mapFileXML;
     pugi::xml_parse_result result = mapFileXML.load_file(mapFileName.GetString());
 
-    if (result == NULL)
+    if(result == NULL)
     {
         LOG("Could not load map xml file %s. pugi error: %s", mapFileName, result.description());
         ret = false;
     }
 
-    if (ret == true)
+    if(ret == true)
     {
         ret = LoadMap(mapFileXML);
     }
@@ -190,7 +190,7 @@ bool Map::Load()
     {
         ret = LoadAllLayers(mapFileXML.child("map"));
     }
-
+    
     //// L07 DONE 3: Create colliders
     //// Later you can create a function here to load and create the colliders from the map
     //PhysBody* c1 = app->physics->CreateRectangle(224 + 128, 543 + 32, 256, 64, STATIC);
@@ -198,14 +198,14 @@ bool Map::Load()
     //c1->ctype = ColliderType::PLATFORM;
 
     ////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-    
+
     ListItem<MapLayer*>* mapLayerItem;
     mapLayerItem = mapData.maplayers.start;
 
     while (mapLayerItem != NULL) {
 
         //L06: DONE 7: use GetProperty method to ask each layer if your “Draw” property is true.
-        if (mapLayerItem->data->properties.GetProperty("Colliders") != NULL && mapLayerItem->data->properties.GetProperty("Colliders")->value) {
+        if (mapLayerItem->data->properties.GetProperty("Collider") != NULL && mapLayerItem->data->properties.GetProperty("Collider")->value) {
 
             for (int x = 0; x < mapLayerItem->data->width; x++)
             {
@@ -218,31 +218,37 @@ bool Map::Load()
                     if (gid == 301)
                     {
                         iPoint pos = MapToWorld(x, y);
-                        PhysBody* mapCollider = app->physics->CreateRectangle(352 + 8, pos.y + 8, 16, 16, STATIC);
+                        PhysBody* mapCollider = app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, STATIC);
                         mapCollider->ctype = ColliderType::PLATFORM;
                     }
-                    
+                    //302 == Green Square (die)
+                    else if (gid == 302)
+                    {
+                        iPoint pos = MapToWorld(x, y);
+                        PhysBody* mapDeathCollider = app->physics->CreateRectangleSensor(pos.x + 8, pos.y + 8, 16, 16, STATIC);
+                        mapDeathCollider->ctype = ColliderType::DEATH;
+                    }
                 }
             }
         }
         mapLayerItem = mapLayerItem->next;
     }
 
-    if (ret == true)
+    if(ret == true)
     {
         // L04: DONE 5: LOG all the data loaded iterate all tilesets and LOG everything
-
+       
         LOG("Successfully parsed map XML file :%s", mapFileName.GetString());
-        LOG("width : %d height : %d", mapData.width, mapData.height);
-        LOG("tile_width : %d tile_height : %d", mapData.tileWidth, mapData.tileHeight);
-
+        LOG("width : %d height : %d",mapData.width,mapData.height);
+        LOG("tile_width : %d tile_height : %d",mapData.tileWidth, mapData.tileHeight);
+        
         LOG("Tilesets----");
 
         ListItem<TileSet*>* tileset;
         tileset = mapData.tilesets.start;
 
         while (tileset != NULL) {
-            LOG("name : %s firstgid : %d", tileset->data->name.GetString(), tileset->data->firstgid);
+            LOG("name : %s firstgid : %d",tileset->data->name.GetString(), tileset->data->firstgid);
             LOG("tile width : %d tile height : %d", tileset->data->tileWidth, tileset->data->tileHeight);
             LOG("spacing : %d margin : %d", tileset->data->spacing, tileset->data->margin);
             tileset = tileset->next;
@@ -259,7 +265,7 @@ bool Map::Load()
         }
     }
 
-    if (mapFileXML) mapFileXML.reset();
+    if(mapFileXML) mapFileXML.reset();
 
     mapLoaded = ret;
 
@@ -290,9 +296,9 @@ bool Map::LoadMap(pugi::xml_node mapFile)
 }
 
 // L04: DONE 4: Implement the LoadTileSet function to load the tileset properties
-bool Map::LoadTileSet(pugi::xml_node mapFile) {
+bool Map::LoadTileSet(pugi::xml_node mapFile){
 
-    bool ret = true;
+    bool ret = true; 
 
     pugi::xml_node tileset;
     for (tileset = mapFile.child("map").child("tileset"); tileset && ret; tileset = tileset.next_sibling("tileset"))

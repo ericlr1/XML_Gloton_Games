@@ -1,8 +1,8 @@
-# {GLOTÓN GALÁCTICO : A Space Odyssey}
+# {Project Name}
 
 ## Description
 
-GLOTÓN GALÁCTICO : A Space Odyssey is a 2D platformer for Game Development subject.
+{project description}
 
 ## Key Features
 
@@ -17,12 +17,13 @@ GLOTÓN GALÁCTICO : A Space Odyssey is a 2D platformer for Game Development sub
 
 ## Developers
 
- - Marcel Sunyer Caldú- {Role(s)}
- - David Ruiz Luengo - {Role(s)}
- - Eric Luque Romero - {Role(s)}
+ - {Dev01} - {Role(s)}
+ - {Dev02} - {Role(s)}
+ - {Dev03} - {Role(s)}
+ - {Dev04} - {Role(s)}
 
 ## License
 
 This project is licensed under an unmodified MIT license, which is an OSI-certified license that allows static linking with closed source software. Check [LICENSE](LICENSE) for further details.
 
-
+{AdditionalLicenses}

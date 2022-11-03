@@ -7,7 +7,6 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Map.h"
-#include "Player.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -80,7 +79,7 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		app->LoadGameRequest();
 
-	/*if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		app->render->camera.y += 3;
 
 	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
@@ -90,10 +89,12 @@ bool Scene::Update(float dt)
 		app->render->camera.x += 3;
 
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x -= 3;*/
+		app->render->camera.x -= 3;
+
+	if (player->position.x > 400 && player->position.x < 3382)
+		app->render->camera.x = -player->position.x + 400;
 
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
-	
 
 	// Draw map
 	app->map->Draw();
