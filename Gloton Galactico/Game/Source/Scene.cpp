@@ -80,20 +80,20 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		app->LoadGameRequest();
 
-	/*if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	/*if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		app->render->camera.y += 3;
 
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 		app->render->camera.y -= 3;
 
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 		app->render->camera.x += 3;
 
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x -= 3;*/
 
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
-	app->render->camera.x = -player->position.x + 100;
+	
 
 	// Draw map
 	app->map->Draw();

@@ -82,6 +82,9 @@ bool Player::Update()
 		vel = b2Vec2(speed, -GRAVITY_Y);
 	}
 
+	if (position.x > 400 && position.x < 3382)
+		app->render->camera.x = -position.x + 400;
+
 	if (numJumps < 2)
 	{
 		//Salto
