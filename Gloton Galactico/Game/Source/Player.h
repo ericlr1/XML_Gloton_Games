@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include "Point.h"
+#include "Animation.h"
 #include "SDL/include/SDL.h"
 
 struct SDL_Texture;
@@ -30,6 +31,12 @@ public:
 public:
 
 private:
+
+	//Animaciones
+	Animation* currentAnimation;
+
+	Animation baseAnimation;
+
 
 	//L02: DONE 1: Declare player parameters
 	SDL_Texture* texture;
