@@ -8,10 +8,20 @@
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
+//#include "Animation.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
 	name.Create("Player");
+
+	//Pushback animation
+	baseAnimation.PushBack({ 0, 0, 35, 30 });
+	baseAnimation.PushBack({ 40, 0, 35, 30 });
+
+	baseAnimation.loop;
+	baseAnimation.speed = 0.05f;
+	
+	
 }
 
 Player::~Player() {
@@ -29,7 +39,7 @@ bool Player::Awake() {
 	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
 
-
+	
 
 	return true;
 }
@@ -55,11 +65,16 @@ bool Player::Start() {
 	//initialize parameters
 	numJumps = 0;
 
+	currentAnimation = &baseAnimation;
+
 	return true;
 }
 
 bool Player::Update()
 {
+
+	currentAnimation->Update();
+	
 
 	// L07 DONE 5: Add physics to the player - updated player position using physics
 
@@ -76,6 +91,7 @@ bool Player::Update()
 
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 		vel = b2Vec2(-speed, -GRAVITY_Y);
+		currentAnimation = &baseAnimation;
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
@@ -125,7 +141,9 @@ bool Player::Update()
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 16;
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 16;
 
-	app->render->DrawTexture(texture, position.x , position.y);
+	SDL_Rect rect = currentAnimation->GetCurrentFrame();
+
+	app->render->DrawTexture(texture, position.x , position.y, &rect);
 
 	return true;
 }
