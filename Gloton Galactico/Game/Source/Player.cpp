@@ -9,29 +9,18 @@
 #include "Point.h"
 #include "Physics.h"
 #include "Map.h"
-#include "Animation.h"
-
+#include "Map.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
 	name.Create("Player");
 
-	//Animation pushbacks
-	
-	for (int i = 0; i < 11; ++i)
-	{
-		rightIdleAnimation.PushBack({ 32*i, 32, 32, 32});
-	}
-	rightIdleAnimation.loop;
-	rightIdleAnimation.speed = 0.3f;
+	//Pushback animation
+	baseAnimation.PushBack({ 0, 0, 35, 30 });
+	baseAnimation.PushBack({ 40, 0, 35, 30 });
 
-	for (int i = 0; i < 11; ++i)
-	{
-		rightRunAnimation.PushBack({ 32 * i, 64, 32, 32 });
-	}
-	rightRunAnimation.loop;
-	rightRunAnimation.speed = 0.3f;
-
+	baseAnimation.loop;
+	baseAnimation.speed = 0.05f;
 }
 
 Player::~Player() {
@@ -47,7 +36,6 @@ bool Player::Awake() {
 	//L02: DONE 5: Get Player parameters from XML
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
-	speed = parameters.attribute("speed").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
 
 	return true;
@@ -59,7 +47,7 @@ bool Player::Start() {
 	playerTexture = app->tex->Load(texturePath);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x+16, position.y+16, 14, bodyType::DYNAMIC);
+	pbody = app->physics->CreateCircle(position.x+16, position.y+16, 16, bodyType::DYNAMIC);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this; 
@@ -72,61 +60,119 @@ bool Player::Start() {
 	pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/coinPickup.ogg");
 	jumpFxId = app->audio->LoadFx("Assets/Audio/Fx/jump.wav");
 
-	currentAnimation = &rightIdleAnimation;
+	numJumps = 0;
+	godMode = false;
 
-	int timerPocho = 0;
-	jumpspeed = -5.5;
-	jumpsavailable = 2;
+	currentAnimation = &baseAnimation;
 	
 	return true;
 }
 
 bool Player::Update()
 {
-	
-	// L07 DONE 5: Add physics to the player - updated player position using physics
-
 	currentAnimation->Update();
 
-	
-	printf("PositionX: %d PositionY: %d\n", position.x, position.y);
 	// L07 DONE 5: Add physics to the player - updated player position using physics
-
+	int speed = 5;
 	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
 
-	if (timerPocho > 0) {
-		timerPocho--;
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-			vel.x = speed;
-		}
-		else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-			vel.x = -speed;
-		}
-		
-			vel = b2Vec2(vel.x, jumpspeed);
-		
+	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
+		godMode = !godMode;
+		numJumps = 0;
+
 	}
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
-	 if ((app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) && jumpsavailable >0) {
-		//
-		 timerPocho = 15;
-		 app->audio->PlayFx(jumpFxId);
-		 jumpsavailable--;
-		/*vel =  b2Vec2(vel.x,jumpspeed);*/
-	}
 	 
-	else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-		//
+	 
+	if (godMode == false)
+	{
+
+
+		//L02: DONE 4: modify the position of the player using arrow keys and render the texture
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+			//
+		}
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+			//
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+			vel = b2Vec2(-speed, -GRAVITY_Y);
+			currentAnimation = &baseAnimation;
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+			vel = b2Vec2(speed, -GRAVITY_Y);
+		}
+
+		if (position.x > 400 && position.x < 3382)
+			app->render->camera.x = -position.x + 400;
+
+		if (numJumps < 2)
+		{
+			//Salto
+			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+
+				//Fuerza de salto
+				salto = -22;
+
+				on_floor = false;
+				numJumps++;
+				app->audio->PlayFx(jumpFxId);
+			}
+		}
+
+		if (salto < 0)
+		{
+			vel.y = salto;
+			salto++;
+		}
+
+		if (on_floor)
+		{
+			numJumps = 0;
+		}
 	}
 
-	else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		vel =  b2Vec2(-speed, vel.y);
+	if (godMode == true)
+	{
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+			//
+		}
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+			//
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+			vel = b2Vec2(-speed, -GRAVITY_Y);
+			currentAnimation = &baseAnimation;
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+			vel = b2Vec2(speed, -GRAVITY_Y);
+		}
+
+		if (position.x > 400 && position.x < 3382)
+			app->render->camera.x = -position.x + 400;
+
+		//Salto
+		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+
+			//Fuerza de salto
+			salto = -22;
+
+			on_floor = false;
+			numJumps++;
+			app->audio->PlayFx(jumpFxId);
+		}
+
+		if (salto < 0)
+		{
+			vel.y = salto;
+			salto++;
+		}
 	}
-	else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-		currentAnimation = &rightRunAnimation;
-		vel = b2Vec2(speed, vel.y);
-	}
-	else currentAnimation = &rightIdleAnimation;
+	
 
 
 	//Set the velocity of the pbody of the player
@@ -165,24 +211,14 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			app->audio->PlayFx(pickCoinFxId);
 			break;
 		case ColliderType::PLATFORM:
-			ground = true;
-			jumpsavailable = 2;
 			LOG("Collision PLATFORM");
-			
-			break;
-		case ColliderType::DEATH:
-			LOG("Collision DEATH");
-			app->audio->PlayFx(pickCoinFxId);
+			on_floor = true;
+
 			break;
 		case ColliderType::UNKNOWN:
 			LOG("Collision UNKNOWN");
 			break;
-		
 			
-				
 	}
 	
-
-
-
 }

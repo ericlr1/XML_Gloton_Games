@@ -15,6 +15,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 	name.Create("Player");
 
 	//Pushback animation
+	
 	baseAnimation.PushBack({ 0, 0, 35, 30 });
 	baseAnimation.PushBack({ 40, 0, 35, 30 });
 

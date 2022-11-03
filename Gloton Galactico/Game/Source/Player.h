@@ -5,7 +5,6 @@
 #include "Point.h"
 #include "Animation.h"
 #include "SDL/include/SDL.h"
-#include "Animation.h"
 
 struct SDL_Texture;
 
@@ -33,24 +32,25 @@ public:
 
 private:
 
+	//Animaciones
+	Animation* currentAnimation;
+
+	Animation baseAnimation;
+
 	//L02: DONE 1: Declare player parameters
 	SDL_Texture* playerTexture;
 	const char* texturePath;
 
-	Animation* currentAnimation;
-	Animation rightRunAnimation;
-	Animation rightIdleAnimation;
-
-	int speed;
-	int jumpspeed;
-	bool ground;
-	int jumpsavailable;
-
-	// L07 DONE 5: Add physics to the player - declare a Physics body
-	PhysBody* pbody;
-	int timerPocho;
 	int pickCoinFxId;
 	int jumpFxId;
+
+	int numJumps;
+	bool is_jumping;
+	bool on_floor;
+
+	int salto;
+
+	bool godMode;
 
 };
 

@@ -16,7 +16,7 @@ public:
 
 private:
 	float currentFrame = 0.0f;
-	
+
 	int loopCount = 0;
 	int pingpongDirection = 1;
 
@@ -31,7 +31,7 @@ public:
 	{
 		currentFrame = 0;
 	}
-	
+
 	bool HasFinished()
 	{
 		return !loop && !pingpong && loopCount > 0;
