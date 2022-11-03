@@ -54,6 +54,8 @@ private:
 
 	int salto;
 
+	bool godMode;
+
 };
 
 #endif // __PLAYER_H__
