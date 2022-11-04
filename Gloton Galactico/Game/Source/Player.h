@@ -59,6 +59,8 @@ private:
 
 	int vidas;
 
+	int speed;
+
 };
 
 #endif // __PLAYER_H__
