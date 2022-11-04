@@ -50,7 +50,7 @@ private:
 	bool is_jumping;
 	bool on_floor;
 
-	int salto;
+	float salto;
 
 	bool godMode;
 

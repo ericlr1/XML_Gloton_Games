@@ -192,13 +192,7 @@ bool Map::Load()
     }
     
     //// L07 DONE 3: Create colliders
-    //// Later you can create a function here to load and create the colliders from the map
-    //PhysBody* c1 = app->physics->CreateRectangle(224 + 128, 543 + 32, 256, 64, STATIC);
-    //// L07 DONE 7: Assign collider type
-    //c1->ctype = ColliderType::PLATFORM;
-
-    ////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-
+    
     ListItem<MapLayer*>* mapLayerItem;
     mapLayerItem = mapData.maplayers.start;
 
@@ -222,7 +216,7 @@ bool Map::Load()
                         mapCollider->ctype = ColliderType::PLATFORM;
                     }
                     //302 == Green Square (die)
-                    else if (gid == 302)
+                    else if (gid == 500)
                     {
                         iPoint pos = MapToWorld(x, y);
                         PhysBody* mapDeathCollider = app->physics->CreateRectangleSensor(pos.x + 8, pos.y + 8, 16, 16, STATIC);
