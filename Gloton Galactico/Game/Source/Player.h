@@ -30,9 +30,11 @@ public:
 
 public:
 
+	PhysBody* pbody;
+
 private:
 
-	PhysBody* pbody;
+	
 
 	//Animaciones
 	Animation* currentAnimation;
