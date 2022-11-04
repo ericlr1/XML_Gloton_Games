@@ -43,6 +43,9 @@ private:
 	SDL_Texture* playerTexture;
 	const char* texturePath;
 
+	SDL_Texture* vidaTexture;
+	const char* vidaPath;
+
 	int pickCoinFxId;
 	int jumpFxId;
 
@@ -53,6 +56,8 @@ private:
 	int salto;
 
 	bool godMode;
+
+	int vidas;
 
 };
 

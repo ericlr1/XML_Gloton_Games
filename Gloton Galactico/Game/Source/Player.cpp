@@ -45,6 +45,7 @@ bool Player::Start() {
 
 	//initilize textures
 	playerTexture = app->tex->Load(texturePath);
+	vidaTexture = app->tex->Load("Assets/Textures/vida.png");
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateCircle(position.x+16, position.y+16, 16, bodyType::DYNAMIC);
@@ -61,6 +62,7 @@ bool Player::Start() {
 	jumpFxId = app->audio->LoadFx("Assets/Audio/Fx/jump.wav");
 
 	numJumps = 0;
+	vidas = 3;
 	godMode = false;
 
 	currentAnimation = &baseAnimation;
@@ -72,16 +74,29 @@ bool Player::Update()
 {
 	currentAnimation->Update();
 
+	if (vidas == 0)
+	{
+		//Acabar la partida
+		LOG("VIDAS = 0");
+		//FadeToBlack -> Game Over
+	}
+
 	// L07 DONE 5: Add physics to the player - updated player position using physics
 	int speed = 5;
 	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
 
+	//Controles de debug
 	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
 		godMode = !godMode;
 		numJumps = 0;
 
 	}
-	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
+	
+	//Provisional para bajar las vidas
+	if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
+		vidas--;
+	}
+	
 	 
 	 
 	if (godMode == false)
@@ -188,6 +203,13 @@ bool Player::Update()
 
 	app->render->DrawTexture(playerTexture, position.x, position.y, &rect);
 
+	for (int i = 0; i < vidas; i++)
+	{
+
+		//app->render->Blit(App->UI->iconoVida, App->render->GetCameraCenterX() - 100 + (9 * i), App->render->GetCameraCenterY() + 120, NULL, 1.0, false);
+		app->render->DrawTexture(vidaTexture, -app->render->camera.x + 50 + ( 35*i), app->render->camera.y + 50);
+	}
+
 
 	return true;
 }
@@ -212,7 +234,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			break;
 		case ColliderType::PLATFORM:
 			LOG("Collision PLATFORM");
-			on_floor = true;
+			if (physB->body->GetWorldCenter().y + 32 < position.y ) //Comprobación de que el collider está por debajo, es decir es el suelo y no el techo
+			{
+				on_floor = true;
+			}
+			
 
 			break;
 		case ColliderType::UNKNOWN:
