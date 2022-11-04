@@ -79,7 +79,8 @@ bool Player::Update()
 	{
 		//Acabar la partida
 		LOG("VIDAS = 0");
-		//FadeToBlack -> Game Over
+		//FadeToBlack -> Game Over 
+		
 	}
 
 	// L07 DONE 5: Add physics to the player - updated player position using physics
@@ -208,7 +209,7 @@ bool Player::Update()
 	{
 
 		//app->render->Blit(App->UI->iconoVida, App->render->GetCameraCenterX() - 100 + (9 * i), App->render->GetCameraCenterY() + 120, NULL, 1.0, false);
-		app->render->DrawTexture(vidaTexture, -app->render->camera.x + 50 + ( 35*i), app->render->camera.y + 50);
+		app->render->DrawTexture(vidaTexture, -app->render->camera.x + 50 + ( 35*i), -app->render->camera.y + 50);
 	}
 
 

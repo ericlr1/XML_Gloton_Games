@@ -7,10 +7,10 @@
 	<:anonymous />
 	<scene />
 	<entitymanager>
-		<player x="1340" y="271" vidas="1" godMode="true" />
+		<player x="1301" y="272" vidas="3" godMode="false" />
 	</entitymanager>
 	<map />
 	<renderer>
-		<camera x="-940" y="0" />
+		<camera x="-897" y="0" />
 	</renderer>
 </save_state>
