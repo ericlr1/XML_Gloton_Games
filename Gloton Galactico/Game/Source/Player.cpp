@@ -129,7 +129,7 @@ bool Player::Update()
 			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 
 				//Fuerza de salto
-				salto = -22;
+				salto = -30.0;
 
 				on_floor = false;
 				numJumps++;
@@ -137,10 +137,10 @@ bool Player::Update()
 			}
 		}
 
-		if (salto < 0)
+		if (salto < 0.0)
 		{
 			vel.y = salto;
-			salto++;
+			salto+=3.5;
 		}
 
 		if (on_floor)
@@ -174,14 +174,14 @@ bool Player::Update()
 		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 
 			//Fuerza de salto
-			salto = -22;
+			salto = -22.0;
 
 			on_floor = false;
 			numJumps++;
 			app->audio->PlayFx(jumpFxId);
 		}
 
-		if (salto < 0)
+		if (salto < 0.0)
 		{
 			vel.y = salto;
 			salto++;
