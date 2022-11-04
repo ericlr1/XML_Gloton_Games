@@ -30,7 +30,13 @@ public:
 
 public:
 
+	//Todo lo que se guarde en en save_game.xml ha de estar en publico para que se pueda acceder
+
 	PhysBody* pbody;
+	
+	bool godMode;
+
+	int vidas;
 
 private:
 
@@ -56,10 +62,6 @@ private:
 	bool on_floor;
 
 	float salto;
-
-	bool godMode;
-
-	int vidas;
 
 	int speed;
 

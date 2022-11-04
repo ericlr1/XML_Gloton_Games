@@ -139,9 +139,13 @@ bool EntityManager::LoadState(pugi::xml_node& data)
 {
 	float x = data.child("player").attribute("x").as_int();
 	float y = data.child("player").attribute("y").as_int();
+	int vidas = data.child("player").attribute("vidas").as_int();
+	bool godMode = data.child("player").attribute("godMode").as_bool();
 
 
 	app->scene->player->pbody->body->SetTransform({ PIXEL_TO_METERS(x),PIXEL_TO_METERS(y) }, 0);
+	app->scene->player->vidas = vidas;
+	app->scene->player->godMode = godMode;
 
 	return true;
 }
@@ -154,6 +158,8 @@ bool EntityManager::SaveState(pugi::xml_node& data)
 
 	player.append_attribute("x") = app->scene->player->position.x;
 	player.append_attribute("y") = app->scene->player->position.y;
+	player.append_attribute("vidas") = app->scene->player->vidas;
+	player.append_attribute("godMode") = app->scene->player->godMode;
 
 	return true;
 }
