@@ -236,10 +236,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			break;
 		case ColliderType::PLATFORM:
 			LOG("Collision PLATFORM");
-			if (physB->body->GetWorldCenter().y + 32 < position.y ) //Comprobación de que el collider está por debajo, es decir es el suelo y no el techo
-			{
-				on_floor = true;
-			}
+			on_floor = true;
+			
 			
 
 			break;
