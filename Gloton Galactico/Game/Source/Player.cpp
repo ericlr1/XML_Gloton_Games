@@ -16,8 +16,8 @@ Player::Player() : Entity(EntityType::PLAYER)
 	name.Create("Player");
 
 	//Pushback animation
-	baseAnimation.PushBack({ 0, 0, 35, 30 });
-	baseAnimation.PushBack({ 40, 0, 35, 30 });
+	baseAnimation.PushBack({ 0, 0, 147, 137 });
+	baseAnimation.PushBack({ 40, 0, 147, 137 });
 
 	baseAnimation.loop;
 	baseAnimation.speed = 0.05f;
