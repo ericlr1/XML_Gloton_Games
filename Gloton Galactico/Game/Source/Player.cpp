@@ -150,7 +150,10 @@ bool Player::Update()
 			numJumps = 0;
 		}
 	}
-
+	if (app->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
+	{
+		vidas += 1;
+	}
 	if (godMode == true)
 	{
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
@@ -240,9 +243,18 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			{
 				on_floor = true;
 			}
-			
-
 			break;
+
+		case ColliderType::DEATH:
+			LOG("Collision DEATH");
+			if (physB->body->GetWorldCenter().y + 32 < position.y) //Comprobación de que el collider está por debajo, es decir es el suelo y no el techo
+			{
+				on_floor = true;
+			}
+			pbody->body->ApplyLinearImpulse(b2Vec2(0, -100), pbody->body->GetWorldCenter(),true);
+			vidas-=1;			
+			break;
+
 		case ColliderType::UNKNOWN:
 			LOG("Collision UNKNOWN");
 			break;
