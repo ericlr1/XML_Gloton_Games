@@ -16,6 +16,7 @@ class Render;
 class Textures;
 class Audio;
 class Scene;
+class SceneIntro;
 class EntityManager;
 class Map;
 //L07 DONE 2: Add Physics module
@@ -87,6 +88,7 @@ public:
 	Textures* tex;
 	Audio* audio;
 	Scene* scene;
+	SceneIntro* sceneIntro;
 	EntityManager* entityManager;
 	Map* map;
 	//L07 DONE 2: Add Physics module
