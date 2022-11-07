@@ -255,7 +255,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			{
 				on_floor = true;
 			}
-			pbody->body->ApplyLinearImpulse(b2Vec2(50, -50), pbody->body->GetWorldCenter(), true);
+			salto = -30;
 			vidas-=1;			
 			break;
 
