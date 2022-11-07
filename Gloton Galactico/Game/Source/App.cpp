@@ -48,6 +48,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 
 	// Render last to swap buffer
 	AddModule(render);
+
+	//scene->active = false; //Con todos los que queramos desactivar de primeras (jugador y todos estos)
 }
 
 // Destructor
