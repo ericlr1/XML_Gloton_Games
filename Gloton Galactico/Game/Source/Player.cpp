@@ -16,8 +16,8 @@ Player::Player() : Entity(EntityType::PLAYER)
 	name.Create("Player");
 
 	//Pushback animation
-	baseAnimation.PushBack({ 0, 0, 147, 137 });
-	baseAnimation.PushBack({ 40, 0, 147, 137 });
+	baseAnimation.PushBack({ 0, 0, 50, 50 });
+	//baseAnimation.PushBack({ 100, 0, 100, 100 });
 
 	baseAnimation.loop;
 	baseAnimation.speed = 0.05f;
@@ -206,7 +206,7 @@ bool Player::Update()
 
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 
-	app->render->DrawTexture(playerTexture, position.x, position.y, &rect);
+	app->render->DrawTexture(playerTexture, -10+position.x, -20+position.y, &rect);
 
 	for (int i = 0; i < vidas; i++)
 	{
@@ -239,10 +239,14 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			break;
 		case ColliderType::PLATFORM:
 			LOG("Collision PLATFORM");
+
 			if (physB->body->GetWorldCenter().y + 32 < position.y ) //Comprobación de que el collider está por debajo, es decir es el suelo y no el techo
 			{
 				on_floor = true;
 			}
+
+			on_floor = true;
+			
 			break;
 
 		case ColliderType::DEATH:
