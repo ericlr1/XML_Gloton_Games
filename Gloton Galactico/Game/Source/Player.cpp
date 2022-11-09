@@ -256,7 +256,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 				on_floor = true;
 			}
 			salto = -30;
-			vidas-=1;			
+			vidas-=0.20;			
 			break;
 
 		case ColliderType::UNKNOWN:

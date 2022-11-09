@@ -47,13 +47,17 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(scene);
 	AddModule(sceneIntro);
 	AddModule(entityManager);
-	AddModule(map);
 	AddModule(fadetoblack);
+	AddModule(map);
+	
 
 	// Render last to swap buffer
 	AddModule(render);
 
-	//scene->active = false; //Con todos los que queramos desactivar de primeras (jugador y todos estos)
+	scene->active = false; //Con todos los que queramos desactivar de primeras (jugador y todos estos)
+	entityManager->active = false;
+	
+	
 }
 
 // Destructor

@@ -65,6 +65,10 @@ bool SceneIntro::Update(float dt)
 {
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	{
+		app->entityManager->active = true;
+		app->fadetoblack->fadetoblack((Module*)app->sceneIntro, (Module*)app->scene, 60);
+	}
 
 		//App.fadetoblack(scene)
 	
