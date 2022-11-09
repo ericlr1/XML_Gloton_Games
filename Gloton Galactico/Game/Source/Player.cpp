@@ -240,7 +240,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		case ColliderType::PLATFORM:
 			LOG("Collision PLATFORM");
 
-			if (physB->body->GetWorldCenter().y + 32 < position.y ) //Comprobación de que el collider está por debajo, es decir es el suelo y no el techo
+			if (physB->body->GetWorldCenter().y - 32 < position.y ) //Comprobación de que el collider está por debajo, es decir es el suelo y no el techo
 			{
 				on_floor = true;
 			}
@@ -256,7 +256,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 				on_floor = true;
 			}
 			salto = -30;
-			vidas-=0.20;			
+			vidas-=1;  //Cosa rara			
 			break;
 
 		case ColliderType::UNKNOWN:
