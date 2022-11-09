@@ -7,6 +7,7 @@
 #include "SceneIntro.h"
 #include "EntityManager.h"
 #include "Map.h"
+#include "FadeToBlack.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -64,8 +65,8 @@ bool SceneIntro::Update(float dt)
 {
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-		//App.fadetoblack(scene)
 
+		//App.fadetoblack(scene)
 	
 
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more

@@ -8,6 +8,7 @@
 #include "EntityManager.h"
 #include "Map.h"
 #include "Physics.h"
+#include "FadeToBlack.h"
 #include "SceneIntro.h"
 
 #include "Defs.h"
@@ -31,6 +32,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	scene = new Scene();
 	sceneIntro = new SceneIntro();
 	entityManager = new EntityManager();
+	fadetoblack = new FadeToBlack();
+
 	map = new Map();
 
 	// Ordered for awake / Start / Update
@@ -45,6 +48,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(sceneIntro);
 	AddModule(entityManager);
 	AddModule(map);
+	AddModule(fadetoblack);
 
 	// Render last to swap buffer
 	AddModule(render);
