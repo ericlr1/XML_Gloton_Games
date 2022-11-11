@@ -77,6 +77,12 @@ bool SceneIntro::Update(float dt)
 		app->entityManager->active = true;
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	{
+
+		game_over = true;
+	}
+
 		//App.fadetoblack(scene)
 	app->render->DrawTexture(fons, 0, 0);
 
@@ -87,7 +93,7 @@ bool SceneIntro::Update(float dt)
 		app->render->DrawTexture(menu, 0, 0);
 	}
 
-	if (game_over)
+	if (game_over == true)
 	{
 		app->render->DrawTexture(Game_Over, 0, 0);
 	}
