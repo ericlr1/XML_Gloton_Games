@@ -40,7 +40,7 @@ bool SceneIntro::Start()
 
 	// L03: DONE: Load map
 	app->map->Load();
-
+	fons = app->tex->Load("Assets/Maps/Tiles/Assets/Background_3.png");
 	// L04: DONE 7: Set the window title with map/tileset info
 	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 		app->map->mapData.width,
@@ -71,7 +71,7 @@ bool SceneIntro::Update(float dt)
 	}
 
 		//App.fadetoblack(scene)
-	
+	app->render->DrawTexture(fons, 0, 0);
 
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 

@@ -51,6 +51,10 @@ bool Player::Start() {
 	// L07 DONE 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateCircle(position.x, position.y+200, 16, bodyType::DYNAMIC);
 
+	//b2MassData mass;
+	//mass.mass = 10;
+	//pbody->body->SetMassData(b2MassData())
+
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this; 
 
@@ -103,14 +107,25 @@ bool Player::Update()
 	 
 	if (godMode == false)
 	{
-
+		if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
+			app->render->camera.x -= 5;
+		}
+		if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
+			app->render->camera.x += 5;
+		}
+		if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
+			app->render->camera.y += 5;
+		}
+		if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
+			app->render->camera.y -= 5;
+		}
 
 		//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
 			//
 		}
 		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-			//
+			
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
@@ -175,24 +190,11 @@ bool Player::Update()
 		if (position.x > 400 && position.x < 3382)
 			app->render->camera.x = -position.x + 400;
 
-		//Salto
-		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-
-			//Fuerza de salto
-			salto = -22.0;
-
-			on_floor = false;
-			numJumps++;
-			app->audio->PlayFx(jumpFxId);
-		}
-
-		if (salto < 0.0)
-		{
-			vel.y = salto;
-			salto++;
-		}
+		
 	}
 	
+	if(app->input->GetKey(SDL_SCANCODE_P)==KEY_DOWN)
+		pbody->body->ApplyForce(b2Vec2(0, -10000), b2Vec2(0, 0), true);
 
 
 	//Set the velocity of the pbody of the player
