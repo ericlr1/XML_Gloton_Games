@@ -42,6 +42,7 @@ bool SceneIntro::Start()
 	app->map->Load();
 	fons = app->tex->Load("Assets/Maps/Tiles/Assets/Background_3.png");
 	menu = app->tex->Load("Assets/Textures/menu.png");
+	Game_Over = app->tex->Load("Assets/Textures/game_over.png");
 	// L04: DONE 7: Set the window title with map/tileset info
 	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 		app->map->mapData.width,
@@ -88,7 +89,7 @@ bool SceneIntro::Update(float dt)
 
 	if (game_over)
 	{
-
+		app->render->DrawTexture(Game_Over, 0, 0);
 	}
 
 

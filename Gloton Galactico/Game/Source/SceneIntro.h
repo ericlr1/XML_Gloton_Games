@@ -45,6 +45,7 @@ private:
 	SDL_Texture* img;
 	SDL_Texture* fons;
 	SDL_Texture* menu;
+	SDL_Texture* Game_Over;
 
 };
 
