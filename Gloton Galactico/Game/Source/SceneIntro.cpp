@@ -41,6 +41,7 @@ bool SceneIntro::Start()
 	// L03: DONE: Load map
 	app->map->Load();
 	fons = app->tex->Load("Assets/Maps/Tiles/Assets/Background_3.png");
+	menu = app->tex->Load("Assets/Textures/test.png");
 	// L04: DONE 7: Set the window title with map/tileset info
 	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 		app->map->mapData.width,
@@ -48,6 +49,10 @@ bool SceneIntro::Start()
 		app->map->mapData.tileWidth,
 		app->map->mapData.tileHeight,
 		app->map->mapData.tilesets.Count());
+
+	playing = false;
+	game_over = false;
+
 
 	app->win->SetTitle(title.GetString());
 
@@ -66,14 +71,26 @@ bool SceneIntro::Update(float dt)
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
-		app->entityManager->active = true;
+		
 		app->fadetoblack->fadetoblack((Module*)app->sceneIntro, (Module*)app->scene, 60);
+		app->entityManager->active = true;
 	}
 
 		//App.fadetoblack(scene)
 	app->render->DrawTexture(fons, 0, 0);
 
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
+
+	if (game_over == false && playing == false)
+	{
+		app->render->DrawTexture(menu, 0, 0);
+	}
+
+	if (game_over)
+	{
+
+	}
+
 
 	// Draw map
 	app->map->Draw();

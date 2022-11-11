@@ -38,10 +38,13 @@ public:
 
 	//L02: DONE 3: Declare a Player attribute 
 	Player* player;
+	bool game_over;
+	bool playing;
 
 private:
 	SDL_Texture* img;
 	SDL_Texture* fons;
+	SDL_Texture* menu;
 
 };
 

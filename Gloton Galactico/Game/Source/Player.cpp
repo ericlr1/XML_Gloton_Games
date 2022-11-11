@@ -10,6 +10,7 @@
 #include "Physics.h"
 #include "Map.h"
 #include "Map.h"
+#include "SceneIntro.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -69,6 +70,7 @@ bool Player::Start() {
 	numJumps = 0;
 	vidas = 3;
 	godMode = false;
+	
 
 	currentAnimation = &baseAnimation;
 	
@@ -78,6 +80,7 @@ bool Player::Start() {
 bool Player::Update()
 {
 	currentAnimation->Update();
+	app->sceneIntro->playing = true;
 
 	if (vidas == 0)
 	{
