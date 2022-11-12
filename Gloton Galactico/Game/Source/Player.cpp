@@ -46,7 +46,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 	jummpingAnimation.PushBack({ 100, 100, 50, 50});
 	jummpingAnimation.PushBack({ 100, 100, 50, 50});
 	jummpingAnimation.PushBack({ 100, 100, 50, 50});
-	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});		//Repetido tantas veces por si un salto es muy alto
 	jummpingAnimation.PushBack({ 100, 100, 50, 50});
 	jummpingAnimation.PushBack({ 100, 100, 50, 50});
 	jummpingAnimation.PushBack({ 100, 100, 50, 50});
@@ -143,11 +143,15 @@ bool Player::Update()
 
 	}
 	
-	//Provisional para bajar las vidas
+	//Provisional para bajar/subir las vidas
 	if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
 		vidas--;
 	}
 	
+	if (app->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
+	{
+		vidas += 1;
+	}
 	 
 	 
 	if (godMode == false)
@@ -212,10 +216,7 @@ bool Player::Update()
 			numJumps = 0;
 		}
 	}
-	if (app->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
-	{
-		vidas += 1;
-	}
+	
 	if (godMode == true)
 	{
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
