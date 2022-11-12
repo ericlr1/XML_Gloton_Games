@@ -16,12 +16,54 @@ Player::Player() : Entity(EntityType::PLAYER)
 {
 	name.Create("Player");
 
-	//Pushback animation
-	baseAnimation.PushBack({ 0, 0, 50, 50 });
-	//baseAnimation.PushBack({ 100, 0, 100, 100 });
+	//Pushback animation - Idle
+	baseAnimation.PushBack({ 0, 100, 50, 50 });
 
 	baseAnimation.loop;
 	baseAnimation.speed = 0.05f;
+
+
+	//Pushback animation - Run
+	runningAnimation.PushBack({ 0, 0, 50, 50});
+	runningAnimation.PushBack({ 50, 0, 50, 50});
+	runningAnimation.PushBack({ 100, 0, 50, 50});
+	runningAnimation.PushBack({ 0, 50, 50, 50});
+	runningAnimation.PushBack({ 50, 50, 50, 50});
+	runningAnimation.PushBack({ 100, 50, 50, 50});
+
+	runningAnimation.loop;
+	runningAnimation.speed = 0.1f;
+
+	//Pushback animation - Jumping
+	jummpingAnimation.PushBack({ 0, 100, 50, 50});
+	jummpingAnimation.PushBack({ 50, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+	jummpingAnimation.PushBack({ 100, 100, 50, 50});
+
+	jummpingAnimation.loop = false;
+	jummpingAnimation.speed = 0.1f;
+
+
+
+	
 }
 
 Player::~Player() {
@@ -50,7 +92,7 @@ bool Player::Start() {
 	vidaTexture = app->tex->Load("Assets/Textures/vida.png");
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x, position.y+200, 16, bodyType::DYNAMIC);
+	pbody = app->physics->CreateCircle(position.x, position.y+200, 12, bodyType::DYNAMIC);
 
 	//b2MassData mass;
 	//mass.mass = 10;
@@ -133,11 +175,12 @@ bool Player::Update()
 
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 			vel = b2Vec2(-speed, -GRAVITY_Y);
-			currentAnimation = &baseAnimation;
+			currentAnimation = &runningAnimation;
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 			vel = b2Vec2(speed, -GRAVITY_Y);
+			currentAnimation = &runningAnimation;
 		}
 
 		if (position.x > 400 && position.x < 3382)
@@ -148,6 +191,7 @@ bool Player::Update()
 			//Salto
 			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 
+				currentAnimation = &jummpingAnimation;
 				//Fuerza de salto
 				salto = -30.0;
 
@@ -199,6 +243,23 @@ bool Player::Update()
 	if(app->input->GetKey(SDL_SCANCODE_P)==KEY_DOWN)
 		pbody->body->ApplyForce(b2Vec2(0, -10000), b2Vec2(0, 0), true);
 
+	// Comprobaciones de las animaciones
+
+	if (!on_floor)
+	{
+		currentAnimation = &jummpingAnimation;
+	}
+
+	/*if (app->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE && app->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE)
+	{
+		currentAnimation = &baseAnimation;
+	}*/
+
+	if (on_floor && app->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE && app->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE)
+	{
+		currentAnimation = &baseAnimation;
+	}
+
 
 	//Set the velocity of the pbody of the player
 	pbody->body->SetLinearVelocity(vel);
@@ -211,7 +272,7 @@ bool Player::Update()
 
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 
-	app->render->DrawTexture(playerTexture, -10+position.x, -20+position.y, &rect);
+	app->render->DrawTexture(playerTexture, -7+position.x, -20+position.y, &rect);
 
 	for (int i = 0; i < vidas; i++)
 	{

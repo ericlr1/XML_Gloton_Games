@@ -46,6 +46,10 @@ private:
 	Animation* currentAnimation;
 
 	Animation baseAnimation;
+	Animation runningAnimation;
+	Animation jummpingAnimation;
+	Animation on_airAnimation;
+
 
 	//L02: DONE 1: Declare player parameters
 	SDL_Texture* playerTexture;
