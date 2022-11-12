@@ -41,10 +41,14 @@ public:
 
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
-
+	
 	// L03: DONE 6: Declare Load / Save methods
 	bool LoadState(pugi::xml_node&);
 	bool SaveState(pugi::xml_node&);
+
+	void SetCameraBounds(const SDL_Rect& rect);
+	void FitCameraInsideBounds();
+	iPoint GetCameraCenter();
 
 public:
 
@@ -52,6 +56,8 @@ public:
 	SDL_Rect camera;
 	SDL_Rect viewport;
 	SDL_Color background;
+	
+	SDL_Rect cam_bounds;
 };
 
 #endif // __RENDER_H__

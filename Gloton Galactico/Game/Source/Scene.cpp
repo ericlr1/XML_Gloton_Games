@@ -61,6 +61,8 @@ bool Scene::Start()
 		app->map->mapData.tilesets.Count());
 
 	app->win->SetTitle(title.GetString());
+	
+	app->render->SetCameraBounds({ 0, 0, 2800, 750 });
 
 	return true;
 }
@@ -104,8 +106,6 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x -= 3;
 
-	if (player->position.x > 400 && player->position.x < 3382)
-		app->render->camera.x = -player->position.x + 400;
 
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 

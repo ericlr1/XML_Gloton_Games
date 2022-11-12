@@ -187,9 +187,6 @@ bool Player::Update()
 			currentAnimation = &runningAnimation;
 		}
 
-		if (position.x > 400 && position.x < 3382)
-			app->render->camera.x = -position.x + 400;
-
 		if (numJumps < 2)
 		{
 			//Salto
@@ -233,12 +230,7 @@ bool Player::Update()
 
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 			vel = b2Vec2(speed, -GRAVITY_Y);
-		}
-
-		if (position.x > 400 && position.x < 3382)
-			app->render->camera.x = -position.x + 400;
-
-		
+		}		
 	}
 	
 	if(app->input->GetKey(SDL_SCANCODE_P)==KEY_DOWN)
@@ -270,6 +262,9 @@ bool Player::Update()
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 16;
 
 	//app->render->DrawTexture(texture, position.x, position.y);
+	CameraMove();
+
+	app->render->FitCameraInsideBounds();
 
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 
@@ -281,7 +276,6 @@ bool Player::Update()
 		//app->render->Blit(App->UI->iconoVida, App->render->GetCameraCenterX() - 100 + (9 * i), App->render->GetCameraCenterY() + 120, NULL, 1.0, false);
 		app->render->DrawTexture(vidaTexture, -app->render->camera.x + 50 + ( 35*i), -app->render->camera.y + 50);
 	}
-
 
 	return true;
 }
@@ -332,4 +326,28 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			
 	}
 	
+}
+
+void Player::CameraMove()
+{
+	iPoint camera_center = app->render->GetCameraCenter();
+
+	int mov = 100;
+
+
+	int despla_d = camera_center.x - mov;
+	int despla_e = camera_center.x + mov;
+
+	if (-position.x < despla_d)
+	{	
+		int total_despla = despla_d + position.x;
+		app->render->camera.x -= total_despla;
+	}
+
+	if (-position.x > despla_e)
+	{
+		int total_despla = position.x + despla_e;
+		app->render->camera.x -= total_despla;
+	}
+
 }

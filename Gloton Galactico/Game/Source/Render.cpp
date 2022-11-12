@@ -76,6 +76,8 @@ bool Render::Update(float dt)
 
 bool Render::PostUpdate()
 {
+	FitCameraInsideBounds();
+
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
 	return true;
@@ -249,3 +251,51 @@ bool Render::SaveState(pugi::xml_node& data)
 
 	return true;
 }
+
+void Render::SetCameraBounds(const SDL_Rect& rect)
+{
+	cam_bounds = rect;
+}
+
+void Render::FitCameraInsideBounds()
+{
+
+	if (camera.x > cam_bounds.x)
+	{
+		float diff = camera.x - cam_bounds.x;
+		camera.x -= diff;
+	}
+
+	if (camera.y > cam_bounds.y)
+	{
+		float diff = camera.y - cam_bounds.y;
+		camera.y -= diff;
+	}
+
+	float camera_right = camera.x - camera.w;
+	float bounds_right = cam_bounds.x - cam_bounds.w;
+
+	if (camera_right < bounds_right)
+	{
+		float diff = camera_right - bounds_right;
+		camera.x -= diff;
+
+	}
+
+	float camera_down = camera.y - camera.h;
+	float bounds_down = cam_bounds.y - cam_bounds.h;
+	if (camera_down < bounds_down)
+	{
+		float diff = camera_down - bounds_down;
+		camera.y -= diff;
+	}
+}
+
+iPoint Render::GetCameraCenter()
+{
+	int x = camera.x - (camera.w * 0.5);
+	int y = camera.y - (camera.h * 0.5);
+
+	return iPoint(x, y);
+}
+
