@@ -8,6 +8,7 @@
 #include "EntityManager.h"
 #include "Map.h"
 #include "FadeToBlack.h"
+#include "Scene.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -74,6 +75,7 @@ bool SceneIntro::Update(float dt)
 	{
 		
 		app->fadetoblack->fadetoblack((Module*)app->sceneIntro, (Module*)app->scene, 60);
+		app->scene->active = true;
 		app->entityManager->active = true;
 	}
 
