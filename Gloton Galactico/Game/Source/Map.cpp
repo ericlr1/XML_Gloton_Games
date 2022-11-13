@@ -209,18 +209,24 @@ bool Map::Load()
                     int gid = mapLayerItem->data->Get(x, y);
 
                     //If GID 301 == Red Square (collider)
-                    if (gid == 1)
+                    if (gid == 69)
                     {
                         iPoint pos = MapToWorld(x, y);
                         PhysBody* mapCollider = app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, STATIC);
                         mapCollider->ctype = ColliderType::PLATFORM;
                     }
                     //302 == Green Square (die)
-                    else if (gid == 2)
+                    else if (gid == 70)
                     {
                         iPoint pos = MapToWorld(x, y);
                         PhysBody* mapDeathCollider = app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, STATIC);
                         mapDeathCollider->ctype = ColliderType::DEATH;
+                    }
+                    else if (gid == 71)
+                    {
+                        iPoint pos = MapToWorld(x, y);
+                        PhysBody* mapDeathCollider = app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, STATIC);
+                        mapDeathCollider->ctype = ColliderType::UNKNOWN;
                     }
                 }
             }

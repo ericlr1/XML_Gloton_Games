@@ -130,7 +130,7 @@ bool Player::Update()
 	{
 		//Acabar la partida
 		LOG("VIDAS = 0");
-		app->sceneIntro->game_over = true;
+		app->sceneIntro->game_over = true;		//La camara se queda en la posición en la que estaba - falta fixear
 		app->entityManager->active = false;
 		app->fadetoblack->fadetoblack((Module*)app->scene, (Module*)app->sceneIntro, 60);
 		
