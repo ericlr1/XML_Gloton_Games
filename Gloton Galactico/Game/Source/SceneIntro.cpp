@@ -71,17 +71,25 @@ bool SceneIntro::PreUpdate()
 bool SceneIntro::Update(float dt)
 {
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && game_over == false)
 	{
 		
 		app->fadetoblack->fadetoblack((Module*)app->sceneIntro, (Module*)app->scene, 60);
 		app->scene->active = true;
 		app->entityManager->active = true;
 	}
+	////Provisionalmente quitado (No va el Retry)
+	//if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && game_over == true)
+	//{
+	//	app->fadetoblack->fadetoblack((Module*)app->sceneIntro, (Module*)app->scene, 60);
+	//	app->scene->active = true;
+	//	app->entityManager->active = true;
+	//	app->entityManager->Start();
+	//	game_over = false;
+	//}
 
 	if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
-
 		game_over = true;
 	}
 

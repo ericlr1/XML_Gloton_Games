@@ -140,17 +140,17 @@ bool Player::Update()
 	currentAnimation->Update();
 	app->sceneIntro->playing = true;
 
-	//if (vidas == 0)
-	//{
-	//	//Acabar la partida
-	//	LOG("VIDAS = 0");
-	//	Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
-	//	app->sceneIntro->game_over = true;		//La camara se queda en la posición en la que estaba - falta fixear
-	//	app->entityManager->active = false;
-	//	app->fadetoblack->fadetoblack((Module*)app->scene, (Module*)app->sceneIntro, 60);
-	//	
-	//	
-	//}
+	if (vidas == 0)
+	{
+		//Acabar la partida
+		LOG("VIDAS = 0");
+		Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
+		app->sceneIntro->game_over = true;		//La camara se queda en la posición en la que estaba - falta fixear
+		app->entityManager->active = false;
+		app->fadetoblack->fadetoblack((Module*)app->scene, (Module*)app->sceneIntro, 60);
+		
+		
+	}
 	
 	// L07 DONE 5: Add physics to the player - updated player position using physics
 	
