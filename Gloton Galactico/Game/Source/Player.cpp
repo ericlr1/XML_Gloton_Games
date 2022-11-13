@@ -77,7 +77,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 	dyingAnimation.PushBack({ 150, 150, 50, 50 });
 
 	dyingAnimation.loop;
-	dyingAnimation.speed = 0.1f;
+	dyingAnimation.speed = 0.05f;
 
 	
 }
