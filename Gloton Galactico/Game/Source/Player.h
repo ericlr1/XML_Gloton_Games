@@ -38,7 +38,7 @@ public:
 	
 	bool godMode;
 
-	float vidas;
+	int vidas;
 
 private:
 

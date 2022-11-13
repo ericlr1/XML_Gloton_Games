@@ -11,6 +11,8 @@
 #include "Map.h"
 #include "Map.h"
 #include "SceneIntro.h"
+#include "FadeToBlack.h"
+#include "EntityManager.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -128,7 +130,10 @@ bool Player::Update()
 	{
 		//Acabar la partida
 		LOG("VIDAS = 0");
-		//FadeToBlack -> Game Over 
+		app->sceneIntro->game_over = true;
+		app->entityManager->active = false;
+		app->fadetoblack->fadetoblack((Module*)app->scene, (Module*)app->sceneIntro, 60);
+		
 		
 	}
 
