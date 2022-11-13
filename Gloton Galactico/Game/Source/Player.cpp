@@ -204,11 +204,13 @@ bool Player::Update()
 
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 			vel = b2Vec2(-speed, -GRAVITY_Y);
-			currentAnimation = &leftrunningAnimation;
+			rotar = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
+			currentAnimation = &runningAnimation;
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 			vel = b2Vec2(speed, -GRAVITY_Y);
+			rotar = SDL_RendererFlip::SDL_FLIP_NONE;
 			currentAnimation = &runningAnimation;
 		}
 
@@ -253,12 +255,13 @@ bool Player::Update()
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 			vel = b2Vec2(-speed, -GRAVITY_Y);
 			rotar = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
-			currentAnimation = &baseAnimation;
+			currentAnimation = &runningAnimation;
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 			vel = b2Vec2(speed, -GRAVITY_Y);
 			rotar = SDL_RendererFlip::SDL_FLIP_NONE;
+			currentAnimation = &runningAnimation;
 		}		
 	}
 	
@@ -279,7 +282,7 @@ bool Player::Update()
 		currentAnimation = &baseAnimation;
 	}
 
-	//PLAYER TELEPORT
+	//TP
 	if (newPos.t == true)
 	{
 		b2Vec2 resetPos = b2Vec2(PIXEL_TO_METERS(newPos.posX), PIXEL_TO_METERS(newPos.posY));
@@ -309,6 +312,19 @@ bool Player::Update()
 
 		//app->render->Blit(App->UI->iconoVida, App->render->GetCameraCenterX() - 100 + (9 * i), App->render->GetCameraCenterY() + 120, NULL, 1.0, false);
 		app->render->DrawTexture(vidaTexture, -app->render->camera.x + 50 + ( 35*i), -app->render->camera.y + 50);
+	}
+
+	//Debug controls
+	// 
+	//Empezar desde el inicio del nivel 1
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	{
+		Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
+	}
+	//Empezar desde el inicio del nivel actual
+	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+		Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
 	}
 
 	return true;

@@ -79,16 +79,6 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	//Empezar desde el inicio del nivel 1
-	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-	{
-		player->pbody->body->SetTransform({ 40, 400 }, 0);
-	}
-	//Empezar desde el inicio del nivel actual
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
-	{
-		player->pbody->body->SetTransform({ 40, 400 }, 0);
-	}
 
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
