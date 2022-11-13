@@ -296,6 +296,7 @@ bool Player::Update()
 	//Comprobación de la muerte
 	if (is_dead)
 	{
+		
 		if (death_timmer >= 0)
 		{
 			//cout << "IS DEAD ";
@@ -307,6 +308,19 @@ bool Player::Update()
 			is_dead = false;
 			death_timmer = 40;
 			Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
+
+			if (vidas == 1)
+			{
+				vidas = 0;
+			}
+			if (vidas == 2)
+			{
+				vidas = 1;
+			}
+			if (vidas == 3)
+			{
+				vidas = 2;
+			}
 		}
 	}
 
