@@ -65,7 +65,14 @@ Player::Player() : Entity(EntityType::PLAYER)
 	jummpingAnimation.loop = false;
 	jummpingAnimation.speed = 0.1f;
 
+	//Pushback animation - death
 
+	dyingAnimation.PushBack({ 0, 150, 50, 50 });
+	dyingAnimation.PushBack({ 100, 150, 50, 50 });
+	dyingAnimation.PushBack({ 150, 150, 50, 50 });
+
+	dyingAnimation.loop = false;
+	dyingAnimation.speed = 0.1f;
 
 	
 }
@@ -114,6 +121,7 @@ bool Player::Start() {
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/coinPickup.ogg");
 	jumpFxId = app->audio->LoadFx("Assets/Audio/Fx/jump.wav");
+	deathFxId = app->audio->LoadFx("Assets/Audio/Fx/death.wav");
 
 	numJumps = 0;
 	vidas = 3;
@@ -351,10 +359,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 		case ColliderType::DEATH:
 			LOG("Collision DEATH");
+			app->audio->PlayFx(deathFxId);
 			if (physB->body->GetWorldCenter().y + 32 < position.y) //Comprobación de que el collider está por debajo, es decir es el suelo y no el techo
 			{
 				on_floor = true;
 			}
+			currentAnimation = &dyingAnimation;
 			salto = -30;
 			vidas-=1;  //Cosa rara			
 			break;

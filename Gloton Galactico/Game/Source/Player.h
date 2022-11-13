@@ -61,6 +61,7 @@ private:
 	Animation runningAnimation;
 	Animation jummpingAnimation;
 	Animation on_airAnimation;
+	Animation dyingAnimation;
 
 
 	//L02: DONE 1: Declare player parameters
@@ -72,6 +73,7 @@ private:
 
 	int pickCoinFxId;
 	int jumpFxId;
+	int deathFxId;
 
 	int numJumps;
 	bool is_jumping;
