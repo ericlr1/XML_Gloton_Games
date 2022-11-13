@@ -38,17 +38,6 @@ Player::Player() : Entity(EntityType::PLAYER)
 	runningAnimation.loop;
 	runningAnimation.speed = 0.1f;
 
-	//Pushback animation - Run
-	leftrunningAnimation.PushBack({ 150, 0, 50, 50 });
-	leftrunningAnimation.PushBack({ 200, 0, 50, 50 });
-	leftrunningAnimation.PushBack({ 250, 0, 50, 50 });
-	leftrunningAnimation.PushBack({ 150, 50, 50, 50 });
-	leftrunningAnimation.PushBack({ 200, 50, 50, 50 });
-	leftrunningAnimation.PushBack({ 250, 50, 50, 50 });
-
-	leftrunningAnimation.loop;
-	leftrunningAnimation.speed = 0.1f;
-
 	//Pushback animation - Jumping
 	jummpingAnimation.PushBack({ 0, 100, 50, 50});
 	jummpingAnimation.PushBack({ 50, 100, 50, 50});

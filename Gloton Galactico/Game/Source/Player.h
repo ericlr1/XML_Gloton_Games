@@ -59,7 +59,6 @@ private:
 
 	Animation baseAnimation;
 	Animation runningAnimation;
-	Animation leftrunningAnimation;
 	Animation jummpingAnimation;
 	Animation on_airAnimation;
 
