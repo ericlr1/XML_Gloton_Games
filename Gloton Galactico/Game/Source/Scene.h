@@ -43,6 +43,8 @@ private:
 	SDL_Texture* img;
 	SDL_Texture* fondo;
 
+	int musicId;
+
 };
 
 #endif // __SCENE_H__

@@ -51,6 +51,7 @@ bool Scene::Start()
 	//img = app->tex->Load("Assets/Textures/test.png");
 	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
 	fondo = app->tex->Load("Assets/Maps/Tiles/Assets/Background_3.png");
+	musicId = app->audio->LoadFx("Assets/Audio/Space Music Pack/Space Music Pack/slow-travel.wav");
 
 	// L03: DONE: Load map
 	app->map->Load();
@@ -64,6 +65,8 @@ bool Scene::Start()
 		app->map->mapData.tilesets.Count());
 
 	app->win->SetTitle(title.GetString());
+
+	app->audio->PlayMusic("Assets/Audio/Space Music Pack/Space Music Pack/loading.wav", 1.0f);
 	
 	app->render->SetCameraBounds({ 0, 0, 2800, 750 });
 
