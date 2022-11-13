@@ -40,7 +40,7 @@ bool Scene::Awake(pugi::xml_node& config)
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 	player->parameters = config.child("player");
 
-	fondo = app->tex->Load("Assets/Maps/Tiles/Assets/Background_3.png");
+	
 
 	return ret;
 }
@@ -50,7 +50,8 @@ bool Scene::Start()
 {
 	//img = app->tex->Load("Assets/Textures/test.png");
 	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
-	
+	fondo = app->tex->Load("Assets/Maps/Tiles/Assets/Background_3.png");
+
 	// L03: DONE: Load map
 	app->map->Load();
 
