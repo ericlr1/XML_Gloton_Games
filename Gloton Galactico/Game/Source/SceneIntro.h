@@ -40,12 +40,14 @@ public:
 	Player* player;
 	bool game_over;
 	bool playing;
+	bool gloton;
 
 private:
 	SDL_Texture* img;
 	SDL_Texture* fons;
 	SDL_Texture* menu;
 	SDL_Texture* Game_Over;
+	SDL_Texture* Gloton;
 
 };
 

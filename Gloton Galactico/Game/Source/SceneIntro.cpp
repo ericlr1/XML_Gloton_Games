@@ -44,6 +44,7 @@ bool SceneIntro::Start()
 	//fons = app->tex->Load("Assets/Maps/Tiles/Assets/Background_3.png");
 	menu = app->tex->Load("Assets/Textures/menu.png");
 	Game_Over = app->tex->Load("Assets/Textures/game_over.png");
+	Gloton = app->tex->Load("Assets/Textures/gloton.png");
 	// L04: DONE 7: Set the window title with map/tileset info
 	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 		app->map->mapData.width,
@@ -54,6 +55,7 @@ bool SceneIntro::Start()
 
 	playing = false;
 	game_over = false;
+	gloton = true;
 
 
 	app->win->SetTitle(title.GetString());
@@ -70,14 +72,22 @@ bool SceneIntro::PreUpdate()
 // Called each loop iteration
 bool SceneIntro::Update(float dt)
 {
+	
+
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && game_over == false)
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && game_over == false && gloton == false)
 	{
 		
 		app->fadetoblack->fadetoblack((Module*)app->sceneIntro, (Module*)app->scene, 60);
 		app->scene->active = true;
 		app->entityManager->active = true;
 	}
+
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && gloton == true)
+	{
+		gloton = false;
+	}
+
 	////Provisionalmente quitado (No va el Retry)
 	//if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && game_over == true)
 	//{
@@ -98,7 +108,12 @@ bool SceneIntro::Update(float dt)
 
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 
-	if (game_over == false && playing == false)
+	if (gloton == true)
+	{
+		app->render->DrawTexture(Gloton, 0, 0);
+	}
+
+	if (game_over == false && playing == false && gloton == false)
 	{
 		app->render->DrawTexture(menu, 0, 0);
 	}
