@@ -410,6 +410,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			break;
 		case ColliderType::DEATH:
 			LOG("Collision DEATH");
+			app->audio->PlayFx(deathFxId);
 			if (physB->body->GetWorldCenter().y + 32 < position.y) //Comprobación de que el collider está por debajo, es decir es el suelo y no el techo
 			{
 				on_floor = true;
