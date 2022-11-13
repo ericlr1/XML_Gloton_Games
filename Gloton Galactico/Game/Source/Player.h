@@ -42,7 +42,7 @@ public:
 
 private:
 
-	
+	SDL_RendererFlip flip;
 
 	//Animaciones
 	Animation* currentAnimation;

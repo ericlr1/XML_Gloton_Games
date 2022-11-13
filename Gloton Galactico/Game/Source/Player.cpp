@@ -13,6 +13,7 @@
 #include "SceneIntro.h"
 #include "FadeToBlack.h"
 #include "EntityManager.h"
+#include "SDL/include/SDL_render.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -197,7 +198,9 @@ bool Player::Update()
 			//Salto
 			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 
+			
 				currentAnimation = &jummpingAnimation;
+
 				//Fuerza de salto
 				salto = -30.0;
 
@@ -230,17 +233,16 @@ bool Player::Update()
 
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 			vel = b2Vec2(-speed, -GRAVITY_Y);
+			flip = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
 			currentAnimation = &baseAnimation;
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 			vel = b2Vec2(speed, -GRAVITY_Y);
+			flip = SDL_RendererFlip::SDL_FLIP_NONE;
 		}		
 	}
 	
-	if(app->input->GetKey(SDL_SCANCODE_P)==KEY_DOWN)
-		pbody->body->ApplyForce(b2Vec2(0, -10000), b2Vec2(0, 0), true);
-
 	// Comprobaciones de las animaciones
 
 	if (!on_floor)
@@ -273,7 +275,7 @@ bool Player::Update()
 
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 
-	app->render->DrawTexture(playerTexture, -7+position.x, -20+position.y, &rect);
+	app->render->DrawTexture(playerTexture, -7+position.x, -20+position.y, &rect, 1.0f, NULL, NULL, NULL, flip);
 
 	for (int i = 0; i < vidas; i++)
 	{
