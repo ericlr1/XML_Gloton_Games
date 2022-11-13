@@ -7,6 +7,8 @@
 
 #include "SDL/include/SDL.h"
 
+#include "SDL/include/SDL_render.h"
+
 class Render : public Module
 {
 public:

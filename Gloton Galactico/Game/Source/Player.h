@@ -5,8 +5,16 @@
 #include "Point.h"
 #include "Animation.h"
 #include "SDL/include/SDL.h"
+#include "Render.h"
 
 struct SDL_Texture;
+
+struct NewPosition {
+	float posX;
+	float posY;
+	bool t;
+
+};
 
 class Player : public Entity
 {
@@ -29,6 +37,8 @@ public:
 
 	void CameraMove();
 
+	void Player::Teleport(int x, int y);
+
 
 public:
 
@@ -42,13 +52,14 @@ public:
 
 private:
 
-	SDL_RendererFlip flip;
+	SDL_RendererFlip rotar;
 
 	//Animaciones
 	Animation* currentAnimation;
 
 	Animation baseAnimation;
 	Animation runningAnimation;
+	Animation leftrunningAnimation;
 	Animation jummpingAnimation;
 	Animation on_airAnimation;
 
@@ -70,6 +81,8 @@ private:
 	float salto;
 
 	int speed;
+
+	NewPosition newPos;
 
 };
 

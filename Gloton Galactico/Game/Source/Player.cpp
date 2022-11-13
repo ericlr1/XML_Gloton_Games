@@ -14,6 +14,7 @@
 #include "FadeToBlack.h"
 #include "EntityManager.h"
 #include "SDL/include/SDL_render.h"
+#include "Animation.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -36,6 +37,17 @@ Player::Player() : Entity(EntityType::PLAYER)
 
 	runningAnimation.loop;
 	runningAnimation.speed = 0.1f;
+
+	//Pushback animation - Run
+	leftrunningAnimation.PushBack({ 150, 0, 50, 50 });
+	leftrunningAnimation.PushBack({ 200, 0, 50, 50 });
+	leftrunningAnimation.PushBack({ 250, 0, 50, 50 });
+	leftrunningAnimation.PushBack({ 150, 50, 50, 50 });
+	leftrunningAnimation.PushBack({ 200, 50, 50, 50 });
+	leftrunningAnimation.PushBack({ 250, 50, 50, 50 });
+
+	leftrunningAnimation.loop;
+	leftrunningAnimation.speed = 0.1f;
 
 	//Pushback animation - Jumping
 	jummpingAnimation.PushBack({ 0, 100, 50, 50});
@@ -79,9 +91,11 @@ bool Player::Awake() {
 	//pos = position;
 	//texturePath = "Assets/Textures/player/idle1.png";
 
+	Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
+
 	//L02: DONE 5: Get Player parameters from XML
-	position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
+	//position.x = parameters.attribute("x").as_int();
+	//position.y = parameters.attribute("y").as_int();
 	speed = parameters.attribute("speed").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
 
@@ -131,16 +145,21 @@ bool Player::Update()
 	{
 		//Acabar la partida
 		LOG("VIDAS = 0");
+		Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
 		app->sceneIntro->game_over = true;		//La camara se queda en la posición en la que estaba - falta fixear
 		app->entityManager->active = false;
 		app->fadetoblack->fadetoblack((Module*)app->scene, (Module*)app->sceneIntro, 60);
 		
 		
 	}
-
 	// L07 DONE 5: Add physics to the player - updated player position using physics
 	
 	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
+
+	if (app->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN) {
+		Teleport(1000, 50);
+	}
+
 
 	//Controles de debug
 	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
@@ -185,7 +204,7 @@ bool Player::Update()
 
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 			vel = b2Vec2(-speed, -GRAVITY_Y);
-			currentAnimation = &runningAnimation;
+			currentAnimation = &leftrunningAnimation;
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
@@ -233,13 +252,13 @@ bool Player::Update()
 
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 			vel = b2Vec2(-speed, -GRAVITY_Y);
-			flip = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
+			rotar = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
 			currentAnimation = &baseAnimation;
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 			vel = b2Vec2(speed, -GRAVITY_Y);
-			flip = SDL_RendererFlip::SDL_FLIP_NONE;
+			rotar = SDL_RendererFlip::SDL_FLIP_NONE;
 		}		
 	}
 	
@@ -260,6 +279,14 @@ bool Player::Update()
 		currentAnimation = &baseAnimation;
 	}
 
+	//PLAYER TELEPORT
+	if (newPos.t == true)
+	{
+		b2Vec2 resetPos = b2Vec2(PIXEL_TO_METERS(newPos.posX), PIXEL_TO_METERS(newPos.posY));
+		pbody->body->SetTransform(resetPos, 0);
+
+		newPos.t = false;
+	}
 
 	//Set the velocity of the pbody of the player
 	pbody->body->SetLinearVelocity(vel);
@@ -275,7 +302,7 @@ bool Player::Update()
 
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 
-	app->render->DrawTexture(playerTexture, -7+position.x, -20+position.y, &rect, 1.0f, NULL, NULL, NULL, flip);
+	app->render->DrawTexture(playerTexture, -7+position.x, -20+position.y, &rect, 1.0f, NULL, NULL, NULL, rotar);
 
 	for (int i = 0; i < vidas; i++)
 	{
@@ -333,6 +360,13 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			
 	}
 	
+}
+
+void Player::Teleport(int x, int y)
+{
+	newPos.posX = x;
+	newPos.posY = y;
+	newPos.t = true;
 }
 
 void Player::CameraMove()
