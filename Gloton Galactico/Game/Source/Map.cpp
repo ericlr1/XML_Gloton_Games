@@ -4,6 +4,7 @@
 #include "Textures.h"
 #include "Map.h"
 #include "Physics.h"
+#include "EntityManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -228,6 +229,12 @@ bool Map::Load()
                         PhysBody* mapDeathCollider = app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, STATIC);
                         mapDeathCollider->ctype = ColliderType::UNKNOWN;
                     }
+                    else if (gid == 72)
+                    {
+                        iPoint pos = MapToWorld(x, y);
+                        PhysBody* mapDeathCollider = app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, STATIC);
+                        mapDeathCollider->ctype = ColliderType::WIN;
+                    }
                 }
             }
         }
@@ -276,6 +283,7 @@ bool Map::Load()
 bool Map::LoadMap(pugi::xml_node mapFile)
 {
     bool ret = true;
+    
     pugi::xml_node map = mapFile.child("map");
 
     if (map == NULL)

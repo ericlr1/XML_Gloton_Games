@@ -9,8 +9,11 @@
  <tileset firstgid="67" name="pincho2" tilewidth="16" tileheight="16" tilecount="2" columns="1">
   <image source="../../../../Tileset final/pincho2.png" trans="ffffff" width="16" height="32"/>
  </tileset>
- <tileset firstgid="69" name="MapMetadata" tilewidth="16" tileheight="16" tilecount="3" columns="3">
-  <image source="MapMetadata.png" width="48" height="16"/>
+ <tileset firstgid="69" name="MapMetadata" tilewidth="16" tileheight="16" tilecount="4" columns="4">
+  <image source="MapMetadata.png" width="64" height="16"/>
+ </tileset>
+ <tileset firstgid="73" name="nave" tilewidth="16" tileheight="16" tilecount="12" columns="4">
+  <image source="Tiles/Assets/nave.png" width="64" height="50"/>
  </tileset>
  <layer id="2" name="Background" width="175" height="50">
   <properties>
@@ -5784,10 +5787,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="73"/>
+   <tile gid="74"/>
+   <tile gid="75"/>
+   <tile gid="76"/>
    <tile/>
    <tile/>
    <tile/>
@@ -5959,10 +5962,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="77"/>
+   <tile gid="78"/>
+   <tile gid="79"/>
+   <tile gid="80"/>
    <tile/>
    <tile/>
    <tile/>
@@ -6134,10 +6137,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="81"/>
+   <tile gid="82"/>
+   <tile gid="83"/>
+   <tile gid="84"/>
    <tile/>
    <tile/>
    <tile/>
@@ -14718,8 +14721,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="72"/>
+   <tile gid="72"/>
    <tile/>
    <tile/>
    <tile/>
@@ -14892,10 +14895,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="72"/>
+   <tile gid="72"/>
+   <tile gid="72"/>
+   <tile gid="72"/>
    <tile/>
    <tile/>
    <tile/>

@@ -70,8 +70,13 @@ Player::Player() : Entity(EntityType::PLAYER)
 	dyingAnimation.PushBack({ 0, 150, 50, 50 });
 	dyingAnimation.PushBack({ 100, 150, 50, 50 });
 	dyingAnimation.PushBack({ 150, 150, 50, 50 });
+	dyingAnimation.PushBack({ 150, 150, 50, 50 });
+	dyingAnimation.PushBack({ 150, 150, 50, 50 });
+	dyingAnimation.PushBack({ 150, 150, 50, 50 });
+	dyingAnimation.PushBack({ 150, 150, 50, 50 });
+	dyingAnimation.PushBack({ 150, 150, 50, 50 });
 
-	dyingAnimation.loop = false;
+	dyingAnimation.loop;
 	dyingAnimation.speed = 0.1f;
 
 	
@@ -330,7 +335,7 @@ bool Player::Update()
 
 	app->render->DrawTexture(playerTexture, -7+position.x, -20+position.y, &rect, 1.0f, NULL, NULL, NULL, rotar);
 
-
+	//UI
 	for (int i = 0; i < vidas; i++)
 	{
 		//app->render->Blit(App->UI->iconoVida, App->render->GetCameraCenterX() - 100 + (9 * i), App->render->GetCameraCenterY() + 120, NULL, 1.0, false);
@@ -338,16 +343,30 @@ bool Player::Update()
 	}
 
 	//Debug controls
-	// 
+	
 	//Empezar desde el inicio del nivel 1
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	{
+		Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
+	}
+	//Empezar desde el inicio del nivel 2
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
 	}
 	//Empezar desde el inicio del nivel actual
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	{
-		Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
+		if (!lv2)
+		{
+			//Tp al inicio del nivel 1
+			Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
+		}
+		else
+		{
+			//Tp al inicio del nivel 2
+			Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
+		}
 	}
 
 	return true;
@@ -373,35 +392,27 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			break;
 		case ColliderType::PLATFORM:
 			LOG("Collision PLATFORM");
-
-			if (physB->body->GetWorldCenter().y - 32 < position.y ) //Comprobación de que el collider está por debajo, es decir es el suelo y no el techo
-			{
-				on_floor = true;
-			}
-
 			on_floor = true;
-			
 			break;
-
 		case ColliderType::DEATH:
 			LOG("Collision DEATH");
-			
 			if (physB->body->GetWorldCenter().y + 32 < position.y) //Comprobación de que el collider está por debajo, es decir es el suelo y no el techo
 			{
 				on_floor = true;
 			}
 			if (godMode == false)
 			{
-				app->audio->PlayFx(deathFxId);
-				currentAnimation = &dyingAnimation;
-				//salto = -30;
-				//vidas -= 1;  //Cosa rara	
-							
+				is_dead = true;
 			}
 			break;
-
 		case ColliderType::UNKNOWN:
 			LOG("Collision UNKNOWN");
+			break;
+		case ColliderType::WIN:
+			LOG("Collision WIN");
+			app->fadetoblack->fadetoblack((Module*)app->scene, (Module*)app->scene, 60);
+			Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
+			lv2 = true;
 			break;
 			
 	}

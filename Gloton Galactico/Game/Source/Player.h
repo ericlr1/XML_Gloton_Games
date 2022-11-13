@@ -86,6 +86,8 @@ private:
 
 	int speed;
 
+	bool lv2;
+
 	NewPosition newPos;
 
 };
