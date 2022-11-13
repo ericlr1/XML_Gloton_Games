@@ -126,7 +126,9 @@ bool Player::Start() {
 	numJumps = 0;
 	vidas = 3;
 	godMode = false;
-	
+
+	is_dead = false;
+	death_timmer = 40;
 
 	currentAnimation = &baseAnimation;
 	
@@ -138,25 +140,21 @@ bool Player::Update()
 	currentAnimation->Update();
 	app->sceneIntro->playing = true;
 
-	if (vidas == 0)
-	{
-		//Acabar la partida
-		LOG("VIDAS = 0");
-		Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
-		app->sceneIntro->game_over = true;		//La camara se queda en la posición en la que estaba - falta fixear
-		app->entityManager->active = false;
-		app->fadetoblack->fadetoblack((Module*)app->scene, (Module*)app->sceneIntro, 60);
-		
-		
-	}
+	//if (vidas == 0)
+	//{
+	//	//Acabar la partida
+	//	LOG("VIDAS = 0");
+	//	Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
+	//	app->sceneIntro->game_over = true;		//La camara se queda en la posición en la que estaba - falta fixear
+	//	app->entityManager->active = false;
+	//	app->fadetoblack->fadetoblack((Module*)app->scene, (Module*)app->sceneIntro, 60);
+	//	
+	//	
+	//}
+	
 	// L07 DONE 5: Add physics to the player - updated player position using physics
 	
 	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
-
-	if (app->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN) {
-		Teleport(1000, 50);
-	}
-
 
 	//Controles de debug
 	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
@@ -167,6 +165,7 @@ bool Player::Update()
 	
 	//Provisional para bajar/subir las vidas
 	if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
+		is_dead = true;
 		vidas--;
 	}
 	
@@ -178,19 +177,6 @@ bool Player::Update()
 	 
 	if (godMode == false)
 	{
-		if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
-			app->render->camera.x -= 5;
-		}
-		if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
-			app->render->camera.x += 5;
-		}
-		if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
-			app->render->camera.y += 5;
-		}
-		if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
-			app->render->camera.y -= 5;
-		}
-
 		//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
 			//
@@ -242,11 +228,12 @@ bool Player::Update()
 	
 	if (godMode == true)
 	{
+		//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
 			//
 		}
 		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-			//
+
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
@@ -259,7 +246,33 @@ bool Player::Update()
 			vel = b2Vec2(speed, -GRAVITY_Y);
 			rotar = SDL_RendererFlip::SDL_FLIP_NONE;
 			currentAnimation = &runningAnimation;
-		}		
+		}
+
+		if (numJumps < 2)
+		{
+			//Salto
+			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+
+
+				currentAnimation = &jummpingAnimation;
+
+				//Fuerza de salto
+				salto = -30.0;
+
+				on_floor = false;
+				numJumps++;
+				app->audio->PlayFx(jumpFxId);
+			}
+		}
+
+		if (salto < 0.0)
+		{
+			vel.y = salto;
+			salto += 3.5;
+		}
+
+		numJumps = 0;
+		
 	}
 	
 	// Comprobaciones de las animaciones
@@ -269,14 +282,27 @@ bool Player::Update()
 		currentAnimation = &jummpingAnimation;
 	}
 
-	/*if (app->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE && app->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE)
-	{
-		currentAnimation = &baseAnimation;
-	}*/
-
 	if (on_floor && app->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE && app->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE)
 	{
 		currentAnimation = &baseAnimation;
+	}
+
+
+	//Comprobación de la muerte
+	if (is_dead)
+	{
+		if (death_timmer >= 0)
+		{
+			//cout << "IS DEAD ";
+			currentAnimation = &dyingAnimation;
+			--death_timmer;
+		}
+		else
+		{
+			is_dead = false;
+			death_timmer = 40;
+			Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
+		}
 	}
 
 	//TP
@@ -304,9 +330,9 @@ bool Player::Update()
 
 	app->render->DrawTexture(playerTexture, -7+position.x, -20+position.y, &rect, 1.0f, NULL, NULL, NULL, rotar);
 
+
 	for (int i = 0; i < vidas; i++)
 	{
-
 		//app->render->Blit(App->UI->iconoVida, App->render->GetCameraCenterX() - 100 + (9 * i), App->render->GetCameraCenterY() + 120, NULL, 1.0, false);
 		app->render->DrawTexture(vidaTexture, -app->render->camera.x + 50 + ( 35*i), -app->render->camera.y + 50);
 	}
@@ -359,14 +385,19 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 		case ColliderType::DEATH:
 			LOG("Collision DEATH");
-			app->audio->PlayFx(deathFxId);
+			
 			if (physB->body->GetWorldCenter().y + 32 < position.y) //Comprobación de que el collider está por debajo, es decir es el suelo y no el techo
 			{
 				on_floor = true;
 			}
-			currentAnimation = &dyingAnimation;
-			salto = -30;
-			vidas-=1;  //Cosa rara			
+			if (godMode == false)
+			{
+				app->audio->PlayFx(deathFxId);
+				currentAnimation = &dyingAnimation;
+				//salto = -30;
+				//vidas -= 1;  //Cosa rara	
+							
+			}
 			break;
 
 		case ColliderType::UNKNOWN:

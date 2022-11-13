@@ -78,6 +78,9 @@ private:
 	int numJumps;
 	bool is_jumping;
 	bool on_floor;
+	
+	bool is_dead;
+	int death_timmer;
 
 	float salto;
 
