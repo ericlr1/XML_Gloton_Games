@@ -67,14 +67,14 @@ Player::Player() : Entity(EntityType::PLAYER)
 
 	//Pushback animation - death
 
-	dyingAnimation.PushBack({ 0, 150, 50, 50 });
-	dyingAnimation.PushBack({ 100, 150, 50, 50 });
-	dyingAnimation.PushBack({ 150, 150, 50, 50 });
-	dyingAnimation.PushBack({ 150, 150, 50, 50 });
-	dyingAnimation.PushBack({ 150, 150, 50, 50 });
-	dyingAnimation.PushBack({ 150, 150, 50, 50 });
-	dyingAnimation.PushBack({ 150, 150, 50, 50 });
-	dyingAnimation.PushBack({ 150, 150, 50, 50 });
+	dyingAnimation.PushBack({ 0, 152, 50, 50 });
+	dyingAnimation.PushBack({ 100, 152, 50, 50 });
+	dyingAnimation.PushBack({ 150, 152, 50, 50 });
+	dyingAnimation.PushBack({ 150, 152, 50, 50 });
+	dyingAnimation.PushBack({ 150, 152, 50, 50 });
+	dyingAnimation.PushBack({ 150, 152, 50, 50 });
+	dyingAnimation.PushBack({ 150, 152, 50, 50 });
+	dyingAnimation.PushBack({ 150, 152, 50, 50 });
 
 	dyingAnimation.loop;
 	dyingAnimation.speed = 0.05f;
@@ -156,6 +156,7 @@ bool Player::Update()
 		
 		
 	}
+	
 	
 	// L07 DONE 5: Add physics to the player - updated player position using physics
 	
