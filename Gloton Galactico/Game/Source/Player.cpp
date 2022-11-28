@@ -302,6 +302,7 @@ bool Player::Update()
 		
 		if (death_timmer >= 0)
 		{
+			dyingAnimation.Reset();
 			//cout << "IS DEAD ";
 			currentAnimation = &dyingAnimation;
 			--death_timmer;

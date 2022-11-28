@@ -42,12 +42,17 @@ bool Scene::Awake(pugi::xml_node& config)
 
 	
 
+	
+
 	return ret;
 }
 
 // Called before the first frame
 bool Scene::Start()
 {
+
+	
+
 	//img = app->tex->Load("Assets/Textures/test.png");
 	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
 	fondo = app->tex->Load("Assets/Maps/Tiles/Assets/Background_3.png");
@@ -82,6 +87,10 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	if (app->entityManager->active == false)
+	{
+		app->entityManager->active = true;
+	}
 
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)

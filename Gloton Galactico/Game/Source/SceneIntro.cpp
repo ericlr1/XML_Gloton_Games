@@ -78,9 +78,8 @@ bool SceneIntro::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && game_over == false && gloton == false)
 	{
 		
-		app->fadetoblack->fadetoblack((Module*)app->sceneIntro, (Module*)app->scene, 60);
-		app->scene->active = true;
-		app->entityManager->active = true;
+		app->fadetoblack->fadetoblack((Module*)app->sceneIntro, (Module*)app->scene, 60);	
+		
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && gloton == true)

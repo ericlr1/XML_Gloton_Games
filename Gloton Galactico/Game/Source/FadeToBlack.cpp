@@ -31,6 +31,9 @@ bool FadeToBlack::Update(float dt)
 		if (frameCount >= maxFadeFrames)
 		{
 			// TODO 1: Enable / disable the modules received when FadeToBlacks() gets called
+			moduleToDisable->active = false;
+			moduleToEnable->active = true;
+
 			currentStep = Fade_Step::FROM_BLACK;
 		}
 	}
@@ -56,6 +59,11 @@ bool FadeToBlack::PostUpdate()
 	SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(fadeRatio * 255.0f));
 	SDL_RenderFillRect(app->render->renderer, &screenRect);
 
+	
+		
+
+	
+
 	return true;
 }
 
@@ -76,8 +84,8 @@ bool FadeToBlack::fadetoblack(Module* toDisable, Module* toEnable, float frames)
 		maxFadeFrames = frames;
 
 		// TODO 1: We need to keep track of the modules received in FadeToBlack(...)
-		this->moduleToDisable = moduleToDisable;
-		this->moduleToEnable = moduleToEnable;
+		moduleToDisable = toDisable;
+		moduleToEnable = toEnable;
 
 		ret = true;
 	}
