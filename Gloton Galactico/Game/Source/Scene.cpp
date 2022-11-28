@@ -56,6 +56,8 @@ bool Scene::Start()
 	//img = app->tex->Load("Assets/Textures/test.png");
 	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
 	fondo = app->tex->Load("Assets/Maps/Tiles/Assets/Background_3.png");
+	planeta = app->tex->Load("Assets/Maps/Tiles/Assets/planeta.png");
+	meteorito = app->tex->Load("Assets/Maps/Tiles/Assets/meteo.png");
 	musicId = app->audio->LoadFx("Assets/Audio/Space Music Pack/Space Music Pack/slow-travel.wav");
 
 	// L03: DONE: Load map
@@ -114,7 +116,9 @@ bool Scene::Update(float dt)
 
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 
-	app->render->DrawTexture(fondo, 0, 0);
+	app->render->DrawTexture(fondo, app->render->camera.x*0.2, 0);
+	app->render->DrawTexture(meteorito, app->render->camera.x +900, 150);
+	app->render->DrawTexture(planeta, app->render->camera.x + 1500, 250);
 	// Draw map
 	app->map->Draw();
 	

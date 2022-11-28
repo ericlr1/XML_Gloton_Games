@@ -42,6 +42,8 @@ public:
 private:
 	SDL_Texture* img;
 	SDL_Texture* fondo;
+	SDL_Texture* meteorito;
+	SDL_Texture* planeta;
 
 	int musicId;
 
