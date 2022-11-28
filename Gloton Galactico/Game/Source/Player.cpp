@@ -99,6 +99,9 @@ bool Player::Awake() {
 	//position.y = parameters.attribute("y").as_int();
 	speed = parameters.attribute("speed").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
+	vidaPath = parameters.attribute("vidapath").as_string();
+	hitFxPath = parameters.attribute("hitFxPath").as_string();
+	jumpFxPath = parameters.attribute("jumpFxPath").as_string();
 
 	return true;
 }
@@ -107,7 +110,7 @@ bool Player::Start() {
 
 	//initilize textures
 	playerTexture = app->tex->Load(texturePath);
-	vidaTexture = app->tex->Load("Assets/Textures/vida.png");
+	vidaTexture = app->tex->Load(vidaPath);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateCircle(position.x, position.y+200, 12, bodyType::DYNAMIC);
@@ -124,9 +127,8 @@ bool Player::Start() {
 	pbody->body->SetLinearVelocity(b2Vec2(0, -GRAVITY_Y));
 
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
-	pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/coinPickup.ogg");
-	jumpFxId = app->audio->LoadFx("Assets/Audio/Fx/jump.wav");
-	deathFxId = app->audio->LoadFx("Assets/Audio/Fx/death.wav");
+	jumpFxId = app->audio->LoadFx(jumpFxPath);
+	deathFxId = app->audio->LoadFx(hitFxPath);
 
 	numJumps = 0;
 	vidas = 3;
@@ -403,7 +405,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	{
 		case ColliderType::ITEM:
 			LOG("Collision ITEM");
-			app->audio->PlayFx(pickCoinFxId);
 			break;
 		case ColliderType::PLATFORM:
 			LOG("Collision PLATFORM");

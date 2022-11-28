@@ -71,7 +71,10 @@ private:
 	SDL_Texture* vidaTexture;
 	const char* vidaPath;
 
-	int pickCoinFxId;
+	//Audio paths
+	const char* hitFxPath;
+	const char* jumpFxPath;
+
 	int jumpFxId;
 	int deathFxId;
 
