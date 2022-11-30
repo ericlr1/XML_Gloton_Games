@@ -90,6 +90,14 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		entity = new Player();
 		break;
 
+	case EntityType::ENEMY_FLY:
+		entity = new Player();		//CAMBIAR
+		break;
+
+	case EntityType::ENEMY_GROUND:
+		entity = new EnemyGround();		//CAMBIAR
+		break;
+
 	case EntityType::ITEM:
 		entity = new Item();
 		break;
@@ -160,6 +168,9 @@ bool EntityManager::SaveState(pugi::xml_node& data)
 	player.append_attribute("y") = app->scene->player->position.y;
 	player.append_attribute("vidas") = app->scene->player->vidas;
 	player.append_attribute("godMode") = app->scene->player->godMode;
+
+	//Incluir aqui los saveState de los enemigos igual que con el player
+
 
 	return true;
 }

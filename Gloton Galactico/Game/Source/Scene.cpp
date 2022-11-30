@@ -39,8 +39,8 @@ bool Scene::Awake(pugi::xml_node& config)
 	//L02: DONE 3: Instantiate the player using the entity manager
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 	player->parameters = config.child("player");
-
-	
+	enemy_1 = (EnemyGround*)app->entityManager->CreateEntity(EntityType::ENEMY_GROUND);
+	enemy_1->parameters = config.child("player");
 
 	
 

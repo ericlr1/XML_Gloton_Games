@@ -362,6 +362,11 @@ bool Player::Update()
 
 	//Debug controls
 	
+	//Crear a un Ground Enemy
+	if (app->input->GetKey(SDL_SCANCODE_X) == KEY_DOWN)
+	{
+
+	}
 	//Empezar desde el inicio del nivel 1
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
