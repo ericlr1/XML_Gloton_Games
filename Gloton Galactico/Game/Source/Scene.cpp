@@ -114,12 +114,17 @@ bool Scene::Update(float dt)
 		app->render->camera.x -= 3;
 
 
-	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
+	
 
+	//Parallax
 	app->render->DrawTexture(fondo, app->render->camera.x*0.2, 0);
-	app->render->DrawTexture(meteorito, app->render->camera.x +900, 150);
+	//Meteos
+	app->render->DrawTexture(meteorito, app->render->camera.x*0.1 +600, 250);
+	app->render->DrawTexture(meteorito, app->render->camera.x * 0.3 + 1117, 356);
+
 	app->render->DrawTexture(planeta, app->render->camera.x + 1500, 250);
 	// Draw map
+	
 	app->map->Draw();
 	
 
