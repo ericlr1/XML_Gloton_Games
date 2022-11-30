@@ -22,6 +22,7 @@
     <ClCompile Include="Source\Physics.cpp" />
     <ClCompile Include="Source\FadeToBlack.cpp" />
     <ClCompile Include="Source\SceneIntro.cpp" />
+    <ClCompile Include="Source\EnemyGround.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -68,6 +69,7 @@
     <ClInclude Include="Source\Animation.h" />
     <ClInclude Include="Source\FadeToBlack.h" />
     <ClInclude Include="Source\SceneIntro.h" />
+    <ClInclude Include="Source\EnemyGround.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
