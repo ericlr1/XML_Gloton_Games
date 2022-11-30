@@ -8,7 +8,7 @@
 	<scene />
 	<scene />
 	<entitymanager>
-		<player x="43" y="659" vidas="3" godMode="true" />
+		<player x="323" y="590" vidas="3" godMode="false" />
 	</entitymanager>
 	<:anonymous />
 	<map />

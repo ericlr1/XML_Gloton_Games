@@ -43,7 +43,9 @@ private:
 	SDL_Texture* img;
 	SDL_Texture* fondo;
 	SDL_Texture* meteorito;
-	SDL_Texture* planeta;
+	SDL_Texture* planeta_1;
+	SDL_Texture* planeta_2;
+	SDL_Texture* planeta_3;
 
 	int musicId;
 

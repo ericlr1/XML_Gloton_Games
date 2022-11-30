@@ -56,7 +56,9 @@ bool Scene::Start()
 	//img = app->tex->Load("Assets/Textures/test.png");
 	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
 	fondo = app->tex->Load("Assets/Maps/Tiles/Assets/Background_3.png");
-	planeta = app->tex->Load("Assets/Maps/Tiles/Assets/planeta.png");
+	planeta_1 = app->tex->Load("Assets/Maps/Tiles/Assets/planeta_1.png");
+	planeta_2 = app->tex->Load("Assets/Maps/Tiles/Assets/planeta_2.png");
+	planeta_3 = app->tex->Load("Assets/Maps/Tiles/Assets/planeta_3.png");
 	meteorito = app->tex->Load("Assets/Maps/Tiles/Assets/meteo.png");
 	musicId = app->audio->LoadFx("Assets/Audio/Space Music Pack/Space Music Pack/slow-travel.wav");
 
@@ -118,11 +120,15 @@ bool Scene::Update(float dt)
 
 	//Parallax
 	app->render->DrawTexture(fondo, app->render->camera.x*0.2, 0);
-	//Meteos
-	app->render->DrawTexture(meteorito, app->render->camera.x*0.1 +600, 250);
-	app->render->DrawTexture(meteorito, app->render->camera.x * 0.3 + 1117, 356);
 
-	app->render->DrawTexture(planeta, app->render->camera.x + 1500, 250);
+	app->render->DrawTexture(meteorito, app->render->camera.x*0.2 +600, 250);
+	app->render->DrawTexture(planeta_2, app->render->camera.x * 0.5 + 1000 , 200);
+	app->render->DrawTexture(planeta_1, app->render->camera.x * 0.2 + 950, 250);
+	app->render->DrawTexture(planeta_3, app->render->camera.x * 0.1 + 1500 , 250);
+	app->render->DrawTexture(planeta_1, app->render->camera.x * 0.2 + 1900, 421);
+	app->render->DrawTexture(meteorito, app->render->camera.x * 0.7 + 2312, 120);
+	app->render->DrawTexture(planeta_1, app->render->camera.x * 0.3 + 2600, 100);
+	app->render->DrawTexture(planeta_2, app->render->camera.x * 0.1 + 2300, 321);
 	// Draw map
 	
 	app->map->Draw();
@@ -146,6 +152,7 @@ bool Scene::PostUpdate()
 bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
+	
 
 	return true;
 }
