@@ -21,7 +21,7 @@ EnemyGround::EnemyGround() : Entity(EntityType::ENEMY_GROUND)
 	name.Create("Enemy Ground");
 
 	//Pushback animation - Idle
-	baseAnimation.PushBack({ 0, 100, 50, 50 });
+	baseAnimation.PushBack({ 0, 0, 50, 50 });
 
 	baseAnimation.loop;
 	baseAnimation.speed = 0.05f;
