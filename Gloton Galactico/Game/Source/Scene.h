@@ -39,7 +39,6 @@ public:
 
 	//L02: DONE 3: Declare a Player attribute 
 	Player* player;
-	EnemyGround* enemy_1;
 
 private:
 	SDL_Texture* img;

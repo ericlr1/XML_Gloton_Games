@@ -30,19 +30,15 @@ bool Scene::Awake(pugi::xml_node& config)
 
 	// iterate all objects in the scene
 	// Check https://pugixml.org/docs/quickstart.html#access
-	/*for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
+	for (pugi::xml_node itemNode = config.child("enemy_ground"); itemNode; itemNode = itemNode.next_sibling("enemy_ground"))
 	{
-		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
-		item->parameters = itemNode;
-	}*/
+		EnemyGround* enemy = (EnemyGround*)app->entityManager->CreateEntity(EntityType::ENEMY_GROUND);
+		enemy->parameters = itemNode;
+	}
 
 	//L02: DONE 3: Instantiate the player using the entity manager
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
-	player->parameters = config.child("player");
-	enemy_1 = (EnemyGround*)app->entityManager->CreateEntity(EntityType::ENEMY_GROUND);
-	enemy_1->parameters = config.child("enemy_ground");
-
-	
+	player->parameters = config.child("player");	
 
 	return ret;
 }

@@ -65,6 +65,8 @@ private:
 	//Audio paths
 	const char* jumpFxPath;
 
+	bool pathfinding;
+
 	int jumpFxId;
 
 	NewPositionEnemy newPosEnemy;

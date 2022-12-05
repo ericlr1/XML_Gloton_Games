@@ -139,21 +139,28 @@ bool EnemyGround::Update()
 
 	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
 
-	
+	if (app->scene->player->position.x + 100 > this->position.x && app->scene->player->position.x - 100 < this->position.x &&
+		app->scene->player->position.y + 100 > this->position.y && app->scene->player->position.y - 100 < this->position.y)
+	{
+		this->pathfinding = true;
+	}
+	else
+	{
+		this->pathfinding = false;
+	}
 	
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
-	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-		//
-	}
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-	}
+	
+	if (this->pathfinding == true)
+	{
+		if (app->scene->player->position.x <= this->position.x) {
+			vel = b2Vec2(-4, -GRAVITY_Y);
+		}
 
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		
-	}
+		if (app->scene->player->position.x > this->position.x) {
+			vel = b2Vec2(4, -GRAVITY_Y);
+		}
 
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-		
 	}
 
 	//TP
