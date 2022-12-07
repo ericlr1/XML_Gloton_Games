@@ -193,7 +193,31 @@ bool Map::Load()
     }
     
     //// L07 DONE 3: Create colliders
-    
+    int Diagonal__r_d[8] = {
+    16, 0,
+    0, 16,
+    16, 16,
+    16, 1
+    };
+    int Diagonal__l_d[8] = {
+    0, 16,
+    0, 0,
+    16, 16,
+    1, 16
+    };
+    int Diagonal__r_u[8] = {
+    0, 16,
+    16, 0,
+    0, 0,
+    0, 16
+    };
+    int Diagonal__l_u[8] = {
+    0, 0,
+    16, 16,
+    16, 0,
+    0, 0
+    };
+
     ListItem<MapLayer*>* mapLayerItem;
     mapLayerItem = mapData.maplayers.start;
 
@@ -216,6 +240,7 @@ bool Map::Load()
                         PhysBody* mapCollider = app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, STATIC);
                         mapCollider->ctype = ColliderType::PLATFORM;
                     }
+                   
                     //302 == Green Square (die)
                     else if (gid == 2)
                     {
@@ -234,6 +259,30 @@ bool Map::Load()
                         iPoint pos = MapToWorld(x, y);
                         PhysBody* mapDeathCollider = app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, STATIC);
                         mapDeathCollider->ctype = ColliderType::WIN;
+                    }
+                    else if (gid == 5)
+                    {
+                        iPoint pos = MapToWorld(x, y);
+                        PhysBody* mapCollider = app->physics->CreateChain(pos.x, pos.y, Diagonal__r_d, 8, STATIC);
+                        mapCollider->ctype = ColliderType::PLATFORM;
+                    }
+                    else if (gid == 6)
+                    {
+                        iPoint pos = MapToWorld(x, y);
+                        PhysBody* mapCollider = app->physics->CreateChain(pos.x, pos.y, Diagonal__l_d, 8, STATIC);
+                        mapCollider->ctype = ColliderType::PLATFORM;
+                    }
+                    else if (gid == 7)
+                    {
+                        iPoint pos = MapToWorld(x, y);
+                        PhysBody* mapCollider = app->physics->CreateChain(pos.x, pos.y, Diagonal__r_u, 8, STATIC);
+                        mapCollider->ctype = ColliderType::PLATFORM;
+                    }
+                    else if (gid == 8)
+                    {
+                        iPoint pos = MapToWorld(x, y);
+                        PhysBody* mapCollider = app->physics->CreateChain(pos.x, pos.y, Diagonal__l_u, 8, STATIC);
+                        mapCollider->ctype = ColliderType::PLATFORM;
                     }
                 }
             }
