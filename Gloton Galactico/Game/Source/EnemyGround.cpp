@@ -157,7 +157,7 @@ bool EnemyGround::Update()
 			vel = b2Vec2(-4, -GRAVITY_Y);
 		}
 
-		if (app->scene->player->position.x > this->position.x) {
+		if (app->scene->player->position.x - 10 > this->position.x) {
 			vel = b2Vec2(4, -GRAVITY_Y);
 		}
 
