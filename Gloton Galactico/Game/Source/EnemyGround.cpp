@@ -154,11 +154,11 @@ bool EnemyGround::Update()
 	if (this->pathfinding == true)
 	{
 		if (app->scene->player->position.x <= this->position.x) {
-			vel = b2Vec2(-4, -GRAVITY_Y);
+			vel = b2Vec2(-2, -GRAVITY_Y);
 		}
 
-		if (app->scene->player->position.x > this->position.x) {
-			vel = b2Vec2(4, -GRAVITY_Y);
+		if (app->scene->player->position.x - 10 > this->position.x) {
+			vel = b2Vec2(2, -GRAVITY_Y);
 		}
 
 	}
