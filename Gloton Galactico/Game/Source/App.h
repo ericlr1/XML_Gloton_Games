@@ -22,6 +22,7 @@ class Map;
 //L07 DONE 2: Add Physics module
 class Physics;
 class FadeToBlack;
+class PathFinding;
 
 class App
 {
@@ -93,6 +94,8 @@ public:
 	EntityManager* entityManager;
 	Map* map;
 	FadeToBlack* fadetoblack;
+	PathFinding* pathfinding;
+
 	//L07 DONE 2: Add Physics module
 	Physics* physics;
 
