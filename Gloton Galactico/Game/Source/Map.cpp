@@ -199,7 +199,8 @@ bool Map::Load()
     if (ret == true)
     {
         ret = LoadAllLayers(mapFileXML.child("map"));
-    }
+     }
+
     
     //// L07 DONE 3: Create colliders
     int Diagonal__r_d[8] = {
