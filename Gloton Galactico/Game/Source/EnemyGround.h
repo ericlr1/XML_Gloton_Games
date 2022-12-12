@@ -6,6 +6,9 @@
 #include "Animation.h"
 #include "SDL/include/SDL.h"
 #include "Render.h"
+#include "PugiXml/src/pugixml.hpp"
+#include "List.h"
+#include "DynArray.h"
 
 struct SDL_Texture;
 
@@ -37,6 +40,7 @@ public:
 
 	void EnemyGround::Teleport(int x, int y);
 
+	void Move(DynArray<iPoint>& path, float dt);
 
 public:
 
