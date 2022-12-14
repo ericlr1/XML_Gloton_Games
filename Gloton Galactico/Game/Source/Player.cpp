@@ -493,6 +493,7 @@ void Player::Shoot()
 	{
 		//Disparar a la derecha
 		LOG("DISPARO DERECHA-----------------");
+
 	}
 	else
 	{
