@@ -15,7 +15,6 @@
 #include "EntityManager.h"
 #include "SDL/include/SDL_render.h"
 #include "Animation.h"
-#include "Defs.h"
 
 EnemyGround::EnemyGround() : Entity(EntityType::ENEMY_GROUND)
 {
@@ -242,72 +241,4 @@ void EnemyGround::Teleport(int x, int y)
 	newPosEnemy.posX = x;
 	newPosEnemy.posY = y;
 	newPosEnemy.t = true;
-}
-
-void EnemyGround::Move(DynArray<iPoint>& path, float dt)
-{
-	//Include del pathfinding.h y pathfinding.cpp
-
-	/*direction = App->pathfinding->CheckDirection(path);
-
-	switch (direction)
-	{
-	case PATH_MOVEMENT::UP_LEFT:
-		animation = &pathAnim;
-		position.x -= speed.x * dt;
-		position.y -= speed.y * dt;
-		flip = true;
-
-		break;
-
-	case PATH_MOVEMENT::UP_RIGHT:
-		animation = &pathAnim;
-		position.x += speed.x * dt;
-		position.y -= speed.y * dt;
-		flip = false;
-
-		break;
-
-	case PATH_MOVEMENT::DOWN_LEFT:
-		animation = &pathAnim;
-		position.x -= speed.x * dt;
-		position.y += speed.y * dt;
-		flip = true;
-
-		break;
-
-	case PATH_MOVEMENT::DOWN_RIGHT:
-		animation = &pathAnim;
-		position.x += speed.x * dt;
-		position.y += speed.y * dt;
-		flip = false;
-
-		break;
-
-	case PATH_MOVEMENT::UP:
-		animation = &pathAnim;
-		position.y -= speed.y * dt;
-
-		break;
-
-	case PATH_MOVEMENT::DOWN:
-		animation = &pathAnim;
-		position.y += speed.y * dt;
-
-		break;
-
-	case PATH_MOVEMENT::LEFT:
-		animation = &pathAnim;
-		position.x -= speed.x * dt;
-		flip = true;
-
-		break;
-
-	case PATH_MOVEMENT::RIGHT:
-		animation = &pathAnim;
-		position.x += speed.x * dt;
-		flip = false;
-
-		break;
-	}*/
 }
