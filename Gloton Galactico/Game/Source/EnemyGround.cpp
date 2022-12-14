@@ -161,24 +161,6 @@ bool EnemyGround::Update()
 			vel = b2Vec2(2, -GRAVITY_Y);
 		}
 
-		////Path-finding
-
-		//if (app->scene->player->position.y >= this->position.y - 10) {
-		//	iPoint srcPos = app->map->WorldToMap((int)position.x, (int)position.y - app->map->GetTileWidth() * 0.5f);
-		//	iPoint trgPos = app->map->WorldToMap(app->scene->player->position.x, app->object->player->position.y - app->map->GetTileWidth() * 0.5f);
-		//	if (app->pathfinding->CreatePathLand(srcPos, trgPos) > -1) {
-		//		pathData.CopyLastGeneratedPath();
-		//		step = 0u;
-		//		currAnim = &movingAnim;
-		//		enemy_state = enemyState::CHASING;
-		//	}
-		//}
-		//else {
-		//	GoIdle();
-		//}
-
-		return true;
-
 	}
 
 	//TP

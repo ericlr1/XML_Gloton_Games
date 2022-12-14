@@ -97,15 +97,6 @@ iPoint Map::MapToWorld(int x, int y) const
     return ret;
 }
 
-iPoint Map::WorldToMap(int x, int y) const
-{
-    iPoint retVec(0, 0);
-    retVec.x = x / mapData.tileWidth;
-    retVec.y = y / mapData.tileHeight;
-     
-    return retVec;
-}
-
 // Get relative Tile rectangle
 SDL_Rect TileSet::GetTileRect(int gid) const
 {
@@ -475,55 +466,4 @@ Properties::Property* Properties::GetProperty(const char* name)
     return p;
 }
 
-int Map::GetTileWidth() const
-{
-    return mapData.tileWidth;
-}
 
-bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
-{
-    bool ret = false;
-    //ListItem<MapLayer*>* item;
-    //item = mapData.maplayers.start;
-
-    //for (item = mapData.maplayers.start; item != NULL; item = item->next)
-    //{
-    //    MapLayer* layer = item->data;
-
-    //    if (layer->properties.navigation == false)
-    //        continue;
-
-    //    uchar* map = new uchar[layer->columns * layer->rows];
-    //    memset(map, 1, layer->columns * layer->rows);
-
-    //    for (int y = 0; y < data.rows; ++y)
-    //    {
-    //        for (int x = 0; x < data.columns; ++x)
-    //        {
-    //            int i = (y * layer->columns) + x;
-
-    //            int tile_id = layer->GetArrayPos(x, y);
-    //            TileSet* tileset = (tile_id > 0) ? GetTilesetFromTileId(tile_id) : NULL;
-
-    //            if (tileset != NULL)
-    //            {
-    //                map[i] = (tile_id - tileset->firstgid) > 0 ? 1 : 0;
-    //                /*TileType* ts = tileset->GetTileType(tile_id);
-    //                if(ts != NULL)
-    //                {
-    //                    map[i] = ts->properties.Get("walkable", 1);
-    //                }*/
-    //            }
-    //        }
-    //    }
-
-    //    *buffer = map;
-    //    width = mapData.columns;
-    //    height = mapData.rows;
-    //    ret = true;
-
-    //    break;
-    //}
-
-    return ret;
-}
