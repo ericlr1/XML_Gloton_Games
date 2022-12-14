@@ -29,10 +29,10 @@
             hitFxPath="Assets/Audio/Fx/death.wav"
             />
     <item x="256" y="515" texturepath="Assets/Textures/goldCoin.png"/>
-    <enemy_ground x="208" y="555" texturepath="Assets/Textures/enemy.png"/>
-    <enemy_ground x="1152" y="96" texturepath="Assets/Textures/enemy.png"/>
-    <enemy_ground x="176" y="208" texturepath="Assets/Textures/enemy.png"/>
-    <enemy_ground x="960" y="352" texturepath="Assets/Textures/enemy.png"/>
+    <enemy_ground x="208" y="535" texturepath="Assets/Textures/enemy.png"/>
+    <enemy_ground x="1152" y="60" texturepath="Assets/Textures/enemy.png"/>
+    <enemy_ground x="176" y="190" texturepath="Assets/Textures/enemy.png"/>
+    <enemy_ground x="960" y="330" texturepath="Assets/Textures/enemy.png"/>
   </scene>
 
   <map>

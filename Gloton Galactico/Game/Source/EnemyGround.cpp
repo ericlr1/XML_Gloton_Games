@@ -148,7 +148,7 @@ bool EnemyGround::Update()
 	{
 		this->pathfinding = false;
 	}
-	
+
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 	
 	if (this->pathfinding == true)
@@ -181,17 +181,16 @@ bool EnemyGround::Update()
 
 	//app->render->DrawTexture(texture, position.x, position.y);
 
-	app->render->FitCameraInsideBounds();
-
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 
-	app->render->DrawTexture(enemyGroundTexture, -7 + position.x, -20 + position.y, &rect, 1.0f, NULL, NULL, NULL, rotar);
+	app->render->DrawTexture(enemyGroundTexture, position.x-7, position.y - 20, &rect, 1.0f, NULL, NULL, NULL, rotar);
 
 	return true;
 }
 
 bool EnemyGround::CleanUp()
 {
+
 	return true;
 }
 
