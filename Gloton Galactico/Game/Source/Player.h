@@ -39,6 +39,8 @@ public:
 
 	void Player::Teleport(int x, int y);
 
+	void Shoot();
+
 
 public:
 

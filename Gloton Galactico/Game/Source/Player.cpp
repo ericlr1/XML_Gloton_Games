@@ -391,6 +391,10 @@ bool Player::Update()
 			Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
 		}
 	}
+	if (app->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+	{
+		Shoot();
+	}
 
 	return true;
 }
@@ -471,4 +475,28 @@ void Player::CameraMove()
 		app->render->camera.x -= total_despla;
 	}
 
+}
+
+void Player::Shoot()
+{
+	bool r;
+	if (rotar)
+	{
+		r = false;
+	}
+	else
+	{
+		r = true;
+	}
+
+	if (r == true)
+	{
+		//Disparar a la derecha
+		LOG("DISPARO DERECHA-----------------");
+	}
+	else
+	{
+		//Disparar a la izquierda
+		LOG("DISPARO IZQUIERDA-----------------");
+	}
 }
