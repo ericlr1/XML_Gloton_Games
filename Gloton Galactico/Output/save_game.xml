@@ -8,10 +8,11 @@
 	<scene />
 	<scene />
 	<entitymanager>
-		<player x="44" y="659" vidas="3" godMode="false" />
+		<player x="43" y="659" vidas="3" godMode="false" />
 	</entitymanager>
 	<:anonymous />
 	<map />
+	<pathfinding />
 	<renderer>
 		<camera x="0" y="0" />
 	</renderer>

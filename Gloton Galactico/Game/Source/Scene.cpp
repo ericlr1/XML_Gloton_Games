@@ -129,7 +129,7 @@ bool Scene::Update(float dt)
 	
 	app->map->Draw();
 	
-
+	
 	//Debud draws - IA
 	if (app->physics->debug)
 	{

@@ -52,6 +52,9 @@ public:
 
 	int vidas;
 
+	//Balas
+	PhysBody* bala;
+
 private:
 
 	SDL_RendererFlip rotar;

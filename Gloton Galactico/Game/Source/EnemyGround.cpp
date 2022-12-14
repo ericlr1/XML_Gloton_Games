@@ -119,7 +119,7 @@ bool EnemyGround::Start() {
 	pbody->listener = this;
 
 	// L07 DONE 7: Assign collider type
-	pbody->ctype = ColliderType::PLAYER;
+	pbody->ctype = ColliderType::ENEMY;
 	pbody->body->SetLinearVelocity(b2Vec2(0, -GRAVITY_Y));
 
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
@@ -203,16 +203,17 @@ void EnemyGround::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 	switch (physB->ctype)
 	{
-	case ColliderType::ITEM:
-		LOG("Collision ITEM");
-		break;
 	case ColliderType::PLATFORM:
 		LOG("Collision PLATFORM");
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
 		break;
-
+	case ColliderType::BULLET:
+		LOG("Collision BULLET");
+		app->entityManager->DestroyEntity(this);
+		pbody->body->SetActive(false);
+		break;
 	}
 
 }

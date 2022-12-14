@@ -396,6 +396,12 @@ bool Player::Update()
 		Shoot();
 	}
 
+	if (bala != NULL)
+	{
+		app->render->DrawTexture(playerTexture, this->bala->body->GetPosition().x*30, this->bala->body->GetPosition().y*30);
+	}
+	
+
 	return true;
 }
 
@@ -413,9 +419,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	
 	switch (physB->ctype)
 	{
-		case ColliderType::ITEM:
-			LOG("Collision ITEM");
-			break;
+		
 		case ColliderType::PLATFORM:
 			LOG("Collision PLATFORM");
 			on_floor = true;
@@ -493,11 +497,21 @@ void Player::Shoot()
 	{
 		//Disparar a la derecha
 		LOG("DISPARO DERECHA-----------------");
-
+		
+		bala = app->physics->CreateCircle(position.x + 16, position.y + 10, 3, DYNAMIC);
+		bala->ctype = ColliderType::BULLET;
+		
+		bala->body->SetLinearVelocity({ 10, 0 });
 	}
 	else
 	{
 		//Disparar a la izquierda
 		LOG("DISPARO IZQUIERDA-----------------");
+
+		bala = app->physics->CreateCircle(position.x + 16, position.y + 10, 3, DYNAMIC);
+		bala->ctype = ColliderType::BULLET;
+		app->render->DrawTexture(playerTexture, bala->body->GetPosition().x, bala->body->GetPosition().y);
+		bala->body->SetLinearVelocity({ -10, 0 });
+
 	}
 }
