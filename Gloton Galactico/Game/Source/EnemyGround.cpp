@@ -100,7 +100,7 @@ bool EnemyGround::Update()
 
 		this->player = app->map->WorldToMap(p.x, p.y);
 
-		SDL_Rect walk = currentAnimation->GetCurrentFrame();
+		SDL_Rect r = currentAnimation->GetCurrentFrame();
 
 		currentAnimation = &idleAnimEnemy;
 
@@ -122,7 +122,7 @@ bool EnemyGround::Update()
 		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y);
 
 		if (alive == true) {
-			app->render->DrawTexture(texture, position.x - 12, position.y - 11, &walk, flip);
+			app->render->DrawTexture(texture, this->position.x - 12, this->position.y - 11, &r, flip);
 		}
 
 		if (app->physics->debug)
@@ -216,7 +216,6 @@ void EnemyGround::OnCollision(PhysBody* physA, PhysBody* physB) {
 		{
 			follow = true;
 		}
-		//Follow();
 		break;
 	}
 }
@@ -232,40 +231,3 @@ void EnemyGround::EndContact(PhysBody* physA, PhysBody* physB) {
 		break;
 	}
 }
-
-void EnemyGround::Follow()
-{
-	const DynArray<iPoint>* path = app->path->GetLastPath();
-
-	for (uint i = 0; i < path->Count(); ++i)
-	{
-		iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-		iPoint epos = app->map->MapToWorld(e.x, e.y + 4);
-
-
-		LOG("e.y: %d", epos.y);
-		LOG("pos.y: %d", pos.y);
-
-		float32 speed = 1.5f;
-
-		if (epos.y < pos.y) {
-			pbody->body->SetLinearVelocity({ 0, speed });
-		}
-
-		if (epos.x < pos.x) {
-			pbody->body->SetLinearVelocity({ speed, 0 });
-
-		}
-
-		if (epos.y > pos.y) {
-			//pbody->body->ApplyForce({0, -4}, {(float32)position.x, (float32)position.y}, true);
-			pbody->body->SetLinearVelocity({ 0, -speed });
-		}
-
-		if (epos.x > pos.x) {
-			pbody->body->SetLinearVelocity({ -speed, 0 });
-
-		}
-	}
-}
-

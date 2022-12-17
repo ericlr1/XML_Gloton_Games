@@ -449,7 +449,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
 			lv2 = true;
 			break;
-		case ColliderType::KILLWALK:
+		case ColliderType::KILLWALK:		//Collider para matar al enemigo
 			app->scene->enemy->kill = true;
 			app->scene->enemy->deadanim = true;
 			break;
