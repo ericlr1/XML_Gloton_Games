@@ -39,6 +39,7 @@ public:
 
 	//L02: DONE 3: Declare a Player attribute 
 	Player* player;
+	EnemyGround* enemy;
 
 private:
 	SDL_Texture* img;
@@ -49,6 +50,13 @@ private:
 	SDL_Texture* planeta_3;
 
 	int musicId;
+
+	SDL_Texture* mouseTileTex = nullptr;
+	SDL_Texture* originTex = nullptr;
+
+	// L12: Debug pathfing
+	iPoint origin;
+	bool originSelected = false;
 
 };
 

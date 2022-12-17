@@ -31,6 +31,8 @@ enum class ColliderType {
 	PLATFORM, 
 	DEATH,
 	UNKNOWN,
+	KILLWALK,
+	SENSOR,
 	WIN
 	// ..
 };
@@ -79,6 +81,7 @@ public:
 	
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
+	void EndContact(b2Contact* contact);
 
 public:
 

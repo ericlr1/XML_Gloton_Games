@@ -1,20 +1,14 @@
 #ifndef __ENEMY_GROUND_H__
 #define __ENEMY_GROUND_H__
 
-#include "Entity.h"		
+#include "Entity.h"
 #include "Point.h"
 #include "Animation.h"
 #include "SDL/include/SDL.h"
-#include "Render.h"
+#include "Physics.h"
+//#include "Item.h"
 
 struct SDL_Texture;
-
-struct NewPositionEnemy {
-	float posX;
-	float posY;
-	bool t;
-
-};
 
 class EnemyGround : public Entity
 {
@@ -32,44 +26,51 @@ public:
 
 	bool CleanUp();
 
+	void Follow();
+
 	// L07 DONE 6: Define OnCollision function for the player. Check the virtual function on Entity class
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 
-	void EnemyGround::Teleport(int x, int y);
+	void EndContact(PhysBody* physA, PhysBody* physB);
 
 
 public:
-
-	//Todo lo que se guarde en en save_game.xml ha de estar en publico para que se pueda acceder
-
 	PhysBody* pbody;
+	PhysBody* sensor;
+	PhysBody* Kill;
+
+	int WalkPosY = 0;
+	int WalkPosX = 0;
+	
+	iPoint p;
+	iPoint e;
+
+	iPoint player;
+	iPoint enemy;
+
+	bool alive;
+	bool kill = false;
+	bool col = true;
+	bool isDead = false;
+	bool follow = false;
+	bool deadanim = false;
+
+	const char* audioPath;
+	int audio;
 
 private:
-
-	SDL_RendererFlip rotar;
-
-	//Animaciones
-	Animation* currentAnimation;
-
-	Animation baseAnimation;
-	Animation runningAnimation;
-	Animation jummpingAnimation;
-	Animation on_airAnimation;
-	Animation dyingAnimation;
-
-
-	//L02: DONE 1: Declare player parameters
-	SDL_Texture* enemyGroundTexture;
+	SDL_Texture* texture;
 	const char* texturePath;
+	SDL_Texture* pathTileTex;
 
-	//Audio paths
-	const char* jumpFxPath;
+	Animation* currentAnimation = nullptr;
+	Animation idleAnimEnemy;
+	Animation movingAnimEnemy;
+	Animation deathAnimEnemy;
 
-	bool pathfinding;
+	SDL_RendererFlip flip = SDL_FLIP_NONE;
 
-	int jumpFxId;
-
-	NewPositionEnemy newPosEnemy;
+	SDL_Rect walk;
 
 };
 

@@ -3,82 +3,32 @@
 #include "Textures.h"
 #include "Audio.h"
 #include "Input.h"
-#include "Render.h"
+#include "Render.h" 
 #include "Scene.h"
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
-#include "Map.h"
-#include "Map.h"
 #include "SceneIntro.h"
-#include "FadeToBlack.h"
 #include "EntityManager.h"
-#include "SDL/include/SDL_render.h"
-#include "Animation.h"
+#include "Map.h"
+#include "Pathfinding.h"
+#include "Player.h"
 
 EnemyGround::EnemyGround() : Entity(EntityType::ENEMY_GROUND)
 {
-	name.Create("Enemy Ground");
+	name.Create("Enemies");
 
-	//Pushback animation - Idle
-	baseAnimation.PushBack({ 0, 0, 50, 50 });
+	idleAnimEnemy.PushBack({ 0,0,16,16 });
+	idleAnimEnemy.speed = 0.1f;
+	idleAnimEnemy.loop = true;
 
-	baseAnimation.loop;
-	baseAnimation.speed = 0.05f;
+	movingAnimEnemy.PushBack({ 0,0,16,16 });
+	movingAnimEnemy.speed = 0.2f;
+	movingAnimEnemy.loop = true;
 
-
-	//Pushback animation - Run
-	runningAnimation.PushBack({ 0, 0, 50, 50 });
-	runningAnimation.PushBack({ 50, 0, 50, 50 });
-	runningAnimation.PushBack({ 100, 0, 50, 50 });
-	runningAnimation.PushBack({ 0, 50, 50, 50 });
-	runningAnimation.PushBack({ 50, 50, 50, 50 });
-	runningAnimation.PushBack({ 100, 50, 50, 50 });
-
-	runningAnimation.loop;
-	runningAnimation.speed = 0.1f;
-
-	//Pushback animation - Jumping
-	jummpingAnimation.PushBack({ 0, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 50, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });		//Repetido tantas veces por si un salto es muy alto
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-	jummpingAnimation.PushBack({ 100, 100, 50, 50 });
-
-	jummpingAnimation.loop = false;
-	jummpingAnimation.speed = 0.1f;
-
-	//Pushback animation - death
-
-	dyingAnimation.PushBack({ 0, 152, 50, 50 });
-	dyingAnimation.PushBack({ 100, 152, 50, 50 });
-	dyingAnimation.PushBack({ 150, 152, 50, 50 });
-	dyingAnimation.PushBack({ 150, 152, 50, 50 });
-	dyingAnimation.PushBack({ 150, 152, 50, 50 });
-	dyingAnimation.PushBack({ 150, 152, 50, 50 });
-	dyingAnimation.PushBack({ 150, 152, 50, 50 });
-	dyingAnimation.PushBack({ 150, 152, 50, 50 });
-
-	dyingAnimation.loop;
-	dyingAnimation.speed = 0.05f;
-
+	deathAnimEnemy.PushBack({ 0,0,16,16 });
+	deathAnimEnemy.speed = 0.1f;
+	deathAnimEnemy.loop = true;
 
 }
 
@@ -88,139 +38,234 @@ EnemyGround::~EnemyGround() {
 
 bool EnemyGround::Awake() {
 
-	//L02: DONE 1: Initialize Player parameters
-	//pos = position;
-	//texturePath = "Assets/Textures/player/idle1.png";
-
-	Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
-
-	//L02: DONE 5: Get Player parameters from XML
-	//position.x = parameters.attribute("x").as_int();
-	//position.y = parameters.attribute("y").as_int();
-	texturePath = parameters.attribute("texturepath").as_string();
-	jumpFxPath = parameters.attribute("jumpFxPath").as_string();
+	position = { 160, 560 };
+	texturePath = parameters.child("enemy_ground").attribute("texturepath").as_string();
 
 	return true;
 }
 
-bool EnemyGround::Start() {
+bool EnemyGround::Start()
+{
+	texture = app->tex->Load(texturePath);
+	pathTileTex = app->tex->Load("Assets/Maps/MapMetadata.png");
 
-	//initilize textures
-	enemyGroundTexture = app->tex->Load(texturePath);
-
-	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x, position.y + 200, 12, bodyType::DYNAMIC);
-
-	//b2MassData mass;
-	//mass.mass = 10;
-	//pbody->body->SetMassData(b2MassData())
-
-	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
-	pbody->listener = this;
-
-	// L07 DONE 7: Assign collider type
-	pbody->ctype = ColliderType::ENEMY;
-	pbody->body->SetLinearVelocity(b2Vec2(0, -GRAVITY_Y));
-
-	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
-	jumpFxId = app->audio->LoadFx(jumpFxPath);
-
-	currentAnimation = &baseAnimation;
+	currentAnimation = &idleAnimEnemy;
 
 	return true;
 }
 
 bool EnemyGround::Update()
 {
-	currentAnimation->Update();
-	app->sceneIntro->playing = true;
-
-	// L07 DONE 5: Add physics to the player - updated player position using physics
-
-	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
-
-	if (app->scene->player->position.x + 100 > this->position.x && app->scene->player->position.x - 100 < this->position.x &&
-		app->scene->player->position.y + 100 > this->position.y && app->scene->player->position.y - 100 < this->position.y)
+	if (col)
 	{
-		this->pathfinding = true;
+		pbody = app->physics->CreateCircle(position.x, position.y, 7.5, bodyType::DYNAMIC);
+		pbody->listener = this;
+		pbody->ctype = ColliderType::ENEMY;
+
+		LOG("PosX: %d", position.x + (8 * 2));
+		LOG("PosY: %d", position.y + (8 * 2));
+
+		//Sensor de si el player está cerca
+		sensor = app->physics->CreateRectangleSensor(position.x + (8 * 2), position.y + (8 * 2), 250, 100, bodyType::KINEMATIC);
+		sensor->listener = this;
+		sensor->ctype = ColliderType::SENSOR;
+
+		//Collider para matar al enemigo saltando sobre él
+		Kill = app->physics->CreateRectangleSensor(position.x, position.y + (20), 10, 20, bodyType::KINEMATIC);
+		Kill->ctype = ColliderType::KILLWALK;
+
+		pbody->GetPosition(WalkPosX, WalkPosY);
+
+		alive = true;
+		isDead = false;
+		kill = false;
+
+		col = false;
+		deadanim = false;
+		currentAnimation = &deathAnimEnemy;
+		currentAnimation->Reset();
 	}
-	else
-	{
-		this->pathfinding = false;
+
+	if (deadanim == true) {
+
+		
 	}
 
-	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
-	
-	if (this->pathfinding == true)
+	if (!isDead)
 	{
-		if (app->scene->player->position.x <= this->position.x) {
-			vel = b2Vec2(-2, -GRAVITY_Y);
+		app->scene->player->pbody->GetPosition(p.x, p.y);
+		this->pbody->GetPosition(e.x, e.y);
+
+		this->enemy = app->map->WorldToMap(e.x, e.y);
+
+		this->player = app->map->WorldToMap(p.x, p.y);
+
+		SDL_Rect walk = currentAnimation->GetCurrentFrame();
+
+		currentAnimation = &idleAnimEnemy;
+
+		if (pbody->body->GetLinearVelocity().x <= -0.1f) {
+
+			flip = SDL_FLIP_HORIZONTAL;
+			currentAnimation = &movingAnimEnemy;
 		}
 
-		if (app->scene->player->position.x - 10 > this->position.x) {
-			vel = b2Vec2(2, -GRAVITY_Y);
+		if (pbody->body->GetLinearVelocity().x >= 0.1f) {
+
+			flip = SDL_FLIP_NONE;
+			currentAnimation = &movingAnimEnemy;
 		}
 
+		currentAnimation->Update();
+
+		position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x);
+		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y);
+
+		if (alive == true) {
+			app->render->DrawTexture(texture, position.x - 12, position.y - 11, &walk, flip);
+		}
+
+		if (app->physics->debug)
+		{
+			const DynArray<iPoint>* path = app->path->GetLastPath();
+			for (uint i = 0; i < path->Count(); ++i)
+			{
+				iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+				SDL_Rect rect = { 0, 0, 16, 16 };
+
+				app->render->DrawTexture(pathTileTex, pos.x, pos.y, &rect);
+
+			}
+		}
+
+		if (kill)
+		{
+			alive = false;
+			pbody->body->GetWorld()->DestroyBody(pbody->body);
+			sensor->body->GetWorld()->DestroyBody(sensor->body);
+			Kill->body->GetWorld()->DestroyBody(Kill->body);
+			//app->audio->PlayFx(audio);
+			isDead = true;
+			deadanim = true;
+		}
+
+		if (follow) {
+			
+			LOG("FOLLOWING------------------------------------------------------------------");
+
+			app->path->CreatePath(enemy, player);
+
+			const DynArray<iPoint>* path = app->path->GetLastPath();
+
+			if (path->At(1) != nullptr)
+			{
+				iPoint pos = app->map->MapToWorld(path->At(1)->x, path->At(1)->y);
+
+
+				float32 speed = 0.6f;
+
+				/*if (e.y < pos.y) {
+					pbody->body->SetLinearVelocity({ 0, speed });
+				}*/
+
+				if (e.x < pos.x) {
+					LOG("-");
+					pbody->body->SetLinearVelocity({ speed, 5.0f });
+				}
+
+				//if (e.y > pos.y) {
+				//	//pbody->body->ApplyForce({0, -4}, {(float32)position.x, (float32)position.y}, true);
+				//	pbody->body->SetLinearVelocity({ 0, -speed });
+				//}
+
+				if (e.x > pos.x) {
+					LOG("+");
+					pbody->body->SetLinearVelocity({ -speed, 5.0f });
+				}
+			}
+		}
+
+		b2Vec2 vec = { (float32)PIXEL_TO_METERS(position.x), (float32)PIXEL_TO_METERS(position.y) };
+		b2Vec2 vec2 = { (float32)PIXEL_TO_METERS(position.x), (float32)PIXEL_TO_METERS(position.y - 0.25) };
+
+		sensor->body->SetTransform(vec, 0);
+		Kill->body->SetTransform(vec2, 0);
 	}
-
-	//TP
-	if (newPosEnemy.t == true)
-	{
-		b2Vec2 resetPos = b2Vec2(PIXEL_TO_METERS(newPosEnemy.posX), PIXEL_TO_METERS(newPosEnemy.posY));
-		this->pbody->body->SetTransform(resetPos, 0);
-
-		newPosEnemy.t = false;
-	}
-
-	//Set the velocity of the pbody of the player
-	this->pbody->body->SetLinearVelocity(vel);
-
-	//Update player position in pixels
-	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 16;
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 16;
-
-	//app->render->DrawTexture(texture, position.x, position.y);
-
-	SDL_Rect rect = currentAnimation->GetCurrentFrame();
-
-	app->render->DrawTexture(enemyGroundTexture, position.x-7, position.y - 20, &rect, 1.0f, NULL, NULL, NULL, rotar);
 
 	return true;
 }
 
 bool EnemyGround::CleanUp()
 {
-
+	if (!isDead) {
+		pbody->body->GetWorld()->DestroyBody(pbody->body);
+		sensor->body->GetWorld()->DestroyBody(sensor->body);
+		Kill->body->GetWorld()->DestroyBody(Kill->body);
+	}
 	return true;
 }
-
-
 
 // L07 DONE 6: Define OnCollision function for the player. Check the virtual function on Entity class
 void EnemyGround::OnCollision(PhysBody* physA, PhysBody* physB) {
 
-	// L07 DONE 7: Detect the type of collision
-
 	switch (physB->ctype)
 	{
-	case ColliderType::PLATFORM:
-		LOG("Collision PLATFORM");
-		break;
-	case ColliderType::UNKNOWN:
-		LOG("Collision UNKNOWN");
-		break;
-	case ColliderType::BULLET:
-		LOG("Collision BULLET");
-		app->entityManager->DestroyEntity(this);
-		pbody->body->SetActive(false);
+	case ColliderType::PLAYER:
+		//app->path->CreatePath(enemy, player);
+		if (app->path->IsWalkable(player) && app->path->IsWalkable(enemy))
+		{
+			follow = true;
+		}
+		//Follow();
 		break;
 	}
-
 }
 
-void EnemyGround::Teleport(int x, int y)
+void EnemyGround::EndContact(PhysBody* physA, PhysBody* physB) {
+	switch (physB->ctype)
+	{
+	case ColliderType::PLAYER:
+		follow = false;
+		pbody->body->SetLinearVelocity({ 0, 0 });
+		sensor->body->SetLinearVelocity({ 0, 0 });
+		Kill->body->SetLinearVelocity({ 0, 0 });
+		break;
+	}
+}
+
+void EnemyGround::Follow()
 {
-	newPosEnemy.posX = x;
-	newPosEnemy.posY = y;
-	newPosEnemy.t = true;
+	const DynArray<iPoint>* path = app->path->GetLastPath();
+
+	for (uint i = 0; i < path->Count(); ++i)
+	{
+		iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+		iPoint epos = app->map->MapToWorld(e.x, e.y + 4);
+
+
+		LOG("e.y: %d", epos.y);
+		LOG("pos.y: %d", pos.y);
+
+		float32 speed = 1.5f;
+
+		if (epos.y < pos.y) {
+			pbody->body->SetLinearVelocity({ 0, speed });
+		}
+
+		if (epos.x < pos.x) {
+			pbody->body->SetLinearVelocity({ speed, 0 });
+
+		}
+
+		if (epos.y > pos.y) {
+			//pbody->body->ApplyForce({0, -4}, {(float32)position.x, (float32)position.y}, true);
+			pbody->body->SetLinearVelocity({ 0, -speed });
+		}
+
+		if (epos.x > pos.x) {
+			pbody->body->SetLinearVelocity({ -speed, 0 });
+
+		}
+	}
 }
+

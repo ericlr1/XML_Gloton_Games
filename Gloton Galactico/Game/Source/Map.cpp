@@ -33,6 +33,98 @@ bool Map::Awake(pugi::xml_node& config)
     return ret;
 }
 
+// L12: Create walkability map for pathfinding
+bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
+{
+    bool ret = false;
+    ListItem<MapLayer*>* item;
+    item = mapData.maplayers.start;
+
+    for (item = mapData.maplayers.start; item != NULL; item = item->next)
+    {
+        MapLayer* layer = item->data;
+
+        if (!layer->properties.GetProperty("Navigation")->value)
+            continue;
+
+        uchar* map = new uchar[layer->width * layer->height];
+        memset(map, 1, layer->width * layer->height);
+
+        for (int y = 0; y < mapData.height; ++y)
+        {
+            for (int x = 0; x < mapData.width; ++x)
+            {
+                int i = (y * layer->width) + x;
+
+                int tileId = layer->Get(x, y);
+                //TileSet* tileset = (tileId > 0) ? GetTilesetFromTileId(tileId) : NULL;
+
+                //if (tileset != NULL)
+                //{
+                if (tileId == 185)
+                    map[i] = 1;
+                else
+                    map[i] = 0;
+                //}
+            }
+        }
+
+        *buffer = map;
+        width = mapData.width;
+        height = mapData.height;
+        ret = true;
+
+        break;
+    }
+    return ret;
+}
+
+bool Map::CreateWalkabilityMapFly(int& width, int& height, uchar** buffer) const
+{
+    bool ret = false;
+    ListItem<MapLayer*>* item;
+    item = mapData.maplayers.start;
+
+    for (item = mapData.maplayers.start; item != NULL; item = item->next)
+    {
+        MapLayer* layer = item->data;
+
+        if (!layer->properties.GetProperty("NavigationWalk")->value)
+            continue;
+
+        uchar* map = new uchar[layer->width * layer->height];
+        memset(map, 1, layer->width * layer->height);
+
+        for (int y = 0; y < mapData.height; ++y)
+        {
+            for (int x = 0; x < mapData.width; ++x)
+            {
+                int i = (y * layer->width) + x;
+
+                int tileId = layer->Get(x, y);
+                //TileSet* tileset = (tileId > 0) ? GetTilesetFromTileId(tileId) : NULL;
+
+                //if (tileset != NULL)
+                //{
+                if (tileId == 16)
+                    map[i] = 1;
+                else
+                    map[i] = 0;
+                //}
+            }
+        }
+
+        *buffer = map;
+        width = mapData.width;
+        height = mapData.height;
+        ret = true;
+
+        break;
+    }
+
+    return ret;
+}
+
 void Map::Draw()
 {
     if(mapLoaded == false)
@@ -93,6 +185,18 @@ iPoint Map::MapToWorld(int x, int y) const
 
     ret.x = x * mapData.tileWidth;
     ret.y = y * mapData.tileHeight;
+
+    return ret;
+}
+
+iPoint Map::WorldToMap(int x, int y)
+{
+    iPoint ret(0, 0);
+
+    ret.x = x / mapData.tileWidth;
+    ret.y = y / mapData.tileHeight;
+
+
 
     return ret;
 }
@@ -220,12 +324,12 @@ bool Map::Load()
     };
 
     ListItem<MapLayer*>* mapLayerItem;
-    mapLayerItem = mapData.maplayers.start;
+    mapLayerItem = mapData.maplayers.end->prev;
 
     while (mapLayerItem != NULL) {
 
         //L06: DONE 7: use GetProperty method to ask each layer if your “Draw” property is true.
-        if (mapLayerItem->data->properties.GetProperty("Collider") != NULL && mapLayerItem->data->properties.GetProperty("Collider")->value) {
+        if (mapLayerItem->data->properties.GetProperty("Collider") != NULL && mapLayerItem->data->properties.GetProperty("Collider")->value == true) {
 
             for (int x = 0; x < mapLayerItem->data->width; x++)
             {
@@ -234,6 +338,14 @@ bool Map::Load()
                     // L05: DONE 9: Complete the draw function
                     int gid = mapLayerItem->data->Get(x, y);
 
+
+                    //L06: DONE 3: Obtain the tile set using GetTilesetFromTileId
+                    TileSet* tileset = GetTilesetFromTileId(gid);
+
+                    SDL_Rect r = tileset->GetTileRect(gid);
+                    iPoint pos = MapToWorld(x, y);
+
+
                     //If GID 301 == Red Square (collider)
                     if (gid == 1)
                     {
@@ -241,7 +353,7 @@ bool Map::Load()
                         PhysBody* mapCollider = app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, STATIC);
                         mapCollider->ctype = ColliderType::PLATFORM;
                     }
-                   
+
                     //302 == Green Square (die)
                     else if (gid == 2)
                     {
@@ -288,24 +400,27 @@ bool Map::Load()
                 }
             }
         }
+
         mapLayerItem = mapLayerItem->next;
+
     }
 
-    if(ret == true)
+
+    if (ret == true)
     {
         // L04: DONE 5: LOG all the data loaded iterate all tilesets and LOG everything
-       
+
         LOG("Successfully parsed map XML file :%s", mapFileName.GetString());
-        LOG("width : %d height : %d",mapData.width,mapData.height);
-        LOG("tile_width : %d tile_height : %d",mapData.tileWidth, mapData.tileHeight);
-        
+        LOG("width : %d height : %d", mapData.width, mapData.height);
+        LOG("tile_width : %d tile_height : %d", mapData.tileWidth, mapData.tileHeight);
+
         LOG("Tilesets----");
 
         ListItem<TileSet*>* tileset;
         tileset = mapData.tilesets.start;
 
         while (tileset != NULL) {
-            LOG("name : %s firstgid : %d",tileset->data->name.GetString(), tileset->data->firstgid);
+            LOG("name : %s firstgid : %d", tileset->data->name.GetString(), tileset->data->firstgid);
             LOG("tile width : %d tile height : %d", tileset->data->tileWidth, tileset->data->tileHeight);
             LOG("spacing : %d margin : %d", tileset->data->spacing, tileset->data->margin);
             tileset = tileset->next;
@@ -322,7 +437,7 @@ bool Map::Load()
         }
     }
 
-    if(mapFileXML) mapFileXML.reset();
+    if (mapFileXML) mapFileXML.reset();
 
     mapLoaded = ret;
 

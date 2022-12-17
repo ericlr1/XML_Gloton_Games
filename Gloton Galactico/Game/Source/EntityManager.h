@@ -40,6 +40,11 @@ public:
 
 	List<Entity*> entities;
 
+	float PosX;
+	float PosY;
+	int flyenemyLive = 0;
+	int enemy_groundLive = 0;
+
 };
 
 #endif // __ENTITYMANAGER_H__

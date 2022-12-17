@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "Physics.h"
 #include "Render.h"
+#include "Pathfinding.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -30,11 +31,16 @@ bool Scene::Awake(pugi::xml_node& config)
 
 	// iterate all objects in the scene
 	// Check https://pugixml.org/docs/quickstart.html#access
-	for (pugi::xml_node itemNode = config.child("enemy_ground"); itemNode; itemNode = itemNode.next_sibling("enemy_ground"))
+
+	//Generar todos los enemigos
+	/*for (pugi::xml_node itemNode = config.child("enemy_ground"); itemNode; itemNode = itemNode.next_sibling("enemy_ground"))
 	{
 		EnemyGround* enemy = (EnemyGround*)app->entityManager->CreateEntity(EntityType::ENEMY_GROUND);
 		enemy->parameters = itemNode;
-	}
+	}*/
+
+	enemy = (EnemyGround*)app->entityManager->CreateEntity(EntityType::ENEMY_GROUND);
+	enemy->parameters = config.child("enemy_ground");
 
 	//L02: DONE 3: Instantiate the player using the entity manager
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
@@ -59,7 +65,19 @@ bool Scene::Start()
 	musicId = app->audio->LoadFx("Assets/Audio/Space Music Pack/Space Music Pack/slow-travel.wav");
 
 	// L03: DONE: Load map
-	app->map->Load();
+	bool retLoad = app->map->Load();
+
+	// L12 Create walkability map
+	if (retLoad) {
+		int w, h;
+		uchar* data = NULL;
+
+		bool retWalkMap = app->map->CreateWalkabilityMap(w, h, &data);
+		if (retWalkMap) app->path->SetMap(w, h, data);
+
+		RELEASE_ARRAY(data);
+
+	}
 
 	// L04: DONE 7: Set the window title with map/tileset info
 	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
@@ -74,6 +92,20 @@ bool Scene::Start()
 	app->audio->PlayMusic("Assets/Audio/Space Music Pack/Space Music Pack/loading.wav", 1.0f);
 	
 	app->render->SetCameraBounds({ 0, 0, 2800, 750 });
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+	// Texture to highligh mouse position 
+	mouseTileTex = app->tex->Load("Assets/Maps/path_square.png");
+
+	// Texture to show path origin 
+	originTex = app->tex->Load("Assets/Maps/x_square.png");
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 	return true;
 }
@@ -111,9 +143,6 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x -= 3;
 
-
-	
-
 	//Parallax
 	app->render->DrawTexture(fondo, app->render->camera.x*0.2, 0);
 
@@ -130,11 +159,61 @@ bool Scene::Update(float dt)
 	app->map->Draw();
 	
 	
-	//Debud draws - IA
+	//Debug draws - IA
 	if (app->physics->debug)
 	{
 		app->render->DrawRectangle({player->position.x - 94, player->position.y - 94, 200, 200}, 188, 0, 0, 100, false, true);
 	}
+
+
+	//Updates de los enemigos
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//Pathfinding with the mouse
+	// L08: DONE 3: Test World to map method
+	int mouseX, mouseY;
+	app->input->GetMousePosition(mouseX, mouseY);
+
+	iPoint mouseTile = iPoint(0, 0);
+
+	mouseTile = app->map->WorldToMap(mouseX - app->render->camera.x, mouseY - app->render->camera.y);
+
+
+	//Convert again the tile coordinates to world coordinates to render the texture of the tile
+	iPoint highlightedTileWorld = app->map->MapToWorld(mouseTile.x, mouseTile.y);
+	app->render->DrawTexture(mouseTileTex, highlightedTileWorld.x, highlightedTileWorld.y);
+
+	//Test compute path function
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		if (originSelected == true)
+		{
+			app->path->CreatePath(origin, mouseTile);
+			originSelected = false;
+		}
+		else
+		{
+			origin = mouseTile;
+			originSelected = true;
+			app->path->ClearLastPath();
+		}
+	}
+
+	// L12: Get the latest calculated path and draw
+	const DynArray<iPoint>* path = app->path->GetLastPath();
+	for (uint i = 0; i < path->Count(); ++i)
+	{
+		iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+		app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
+	}
+
+	// L12: Debug pathfinding
+	iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
+	app->render->DrawTexture(originTex, originScreen.x, originScreen.y);
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 	return true;
 }

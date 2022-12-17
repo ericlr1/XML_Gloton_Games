@@ -44,7 +44,7 @@ bool PathFinding::CheckBoundaries(const iPoint& pos) const
 		pos.y >= 0 && pos.y <= (int)height);
 }
 
-// Utility: returns true is the tile is walkable
+// Utility: returns true if the tile is walkable
 bool PathFinding::IsWalkable(const iPoint& pos) const
 {
 	uchar t = GetTileAt(pos);
@@ -178,6 +178,9 @@ int PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 	int ret = -1;
 	int iterations = 0;
 
+	LOG("Walk origin: %d", IsWalkable(origin));
+	LOG("Walk destianation: %d", IsWalkable(destination));
+
 	// L12: TODO 1: if origin or destination are not walkable, return -1
 	if (IsWalkable(origin) && IsWalkable(destination))
 	{
@@ -251,6 +254,7 @@ int PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 			++iterations;
 		}
 	}
+
 
 	return ret;
 }

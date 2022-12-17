@@ -30,11 +30,11 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	audio = new Audio();
 	//L07 DONE 2: Add Physics module
 	physics = new Physics();
-	scene = new Scene();
 	sceneIntro = new SceneIntro();
 	entityManager = new EntityManager();
 	fadetoblack = new FadeToBlack();
 	path = new PathFinding();
+	scene = new Scene();
 
 	map = new Map();
 

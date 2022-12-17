@@ -14,10 +14,10 @@ class Window;
 class Input;
 class Render;
 class Textures;
+class EntityManager;
 class Audio;
 class Scene;
 class SceneIntro;
-class EntityManager;
 class Map;
 //L07 DONE 2: Add Physics module
 class Physics;

@@ -1,5 +1,7 @@
 #include "EntityManager.h"
 #include "Player.h"
+#include "EnemyGround.h"
+
 #include "Item.h"
 #include "App.h"
 #include "Textures.h"
@@ -98,7 +100,7 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		entity = new EnemyGround();		//CAMBIAR
 		break;
 
-	case EntityType::ITEM:
+	case EntityType::ITEM:		//CREAR BULLET AQUI - ERIC
 		entity = new Item();
 		break;
 
@@ -154,6 +156,26 @@ bool EntityManager::LoadState(pugi::xml_node& data)
 	app->scene->player->pbody->body->SetTransform({ PIXEL_TO_METERS(x),PIXEL_TO_METERS(y) }, 0);
 	app->scene->player->vidas = vidas;
 	app->scene->player->godMode = godMode;
+
+	if (!app->scene->enemy->isDead) {
+
+
+		PosX = data.child("ground_enemy").attribute("x").as_int();
+		PosY = data.child("ground_enemy").attribute("y").as_int();
+
+		/*app->scene->fly->position.x = PosX;
+		app->scene->fly->position.y = PosY;*/
+
+		app->scene->enemy->pbody->body->SetTransform({ PIXEL_TO_METERS(PosX), PIXEL_TO_METERS(PosY) }, 0);
+	}
+
+	if (enemy_groundLive == 0)
+	{
+		if (app->scene->enemy->isDead)
+		{
+			app->scene->enemy->col = true;
+		}
+	}
 
 	return true;
 }

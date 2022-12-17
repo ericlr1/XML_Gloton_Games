@@ -75,6 +75,10 @@ public:
 	
 	};
 
+	virtual void EndContact(PhysBody* physA, PhysBody* physB) {
+
+	};
+
 public:
 
 	SString name;

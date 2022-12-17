@@ -395,10 +395,14 @@ bool Player::Update()
 	{
 		Shoot();
 	}
+	if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	{
+		app->scene->enemy->follow = true;
+	}
 
 	if (bala != NULL)
 	{
-		app->render->DrawTexture(playerTexture, this->bala->body->GetPosition().x*30, this->bala->body->GetPosition().y*30);
+		//app->render->DrawTexture(playerTexture,  this->bala->body->GetPosition().x, this->bala->body->GetPosition().y*30);
 	}
 	
 
