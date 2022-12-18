@@ -39,7 +39,8 @@ EnemyGround::~EnemyGround() {
 bool EnemyGround::Awake() {
 
 	position = { 160, 560 };
-	texturePath = parameters.child("enemy_ground").attribute("texturepath").as_string();
+	//texturePath = parameters.child("enemy_ground").attribute("texturepath").as_string();
+	texturePath = "Assets/Textures/enemy.png";
 
 	return true;
 }
