@@ -64,6 +64,10 @@ bool EnemyGround::Start()
 {
 	texture = app->tex->Load(texturePath);
 	pathTileTex = app->tex->Load("Assets/Maps/MapMetadata.png");
+	
+	
+	isDead = false;
+	deathtimmer = 40;
 
 	currentAnimation = &idleAnimEnemy;
 
@@ -94,30 +98,26 @@ bool EnemyGround::Update()
 
 		alive = true;
 		isDead = false;
-		deathtimmer = 1;
 		kill = false;
 
 		col = false;
 		deadanim = false;
-		currentAnimation = &deathAnimEnemy;
-		currentAnimation->Reset();
+	
 	}
 
 	if (deadanim == true) {
+
 		if (deathtimmer >= 0)
 		{
 			deathAnimEnemy.Reset();
-			//cout << "IS DEAD ";
 			currentAnimation = &deathAnimEnemy;
 			--deathtimmer;
 		}
-		else
-		{
-			isDead = false;
-			deathtimmer = 1;
-		}
 		
 	}
+
+
+
 
 	if (!isDead)
 	{
@@ -175,6 +175,8 @@ bool EnemyGround::Update()
 			//app->audio->PlayFx(audio);
 			isDead = true;
 			deadanim = true;
+			
+			
 		}
 
 		if (follow) {
