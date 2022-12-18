@@ -41,8 +41,7 @@ EnemyGround::EnemyGround() : Entity(EntityType::ENEMY_GROUND)
 	deathAnimEnemy.PushBack({ 0,150,50,50 });
 	deathAnimEnemy.PushBack({ 50,150,50,50 });
 	deathAnimEnemy.PushBack({ 0,200,50,50 });
-	deathAnimEnemy.PushBack({ 50,200,50,50 });
-	deathAnimEnemy.PushBack({ 0,250,50,50 });
+	
 	deathAnimEnemy.speed = 0.1f;
 	deathAnimEnemy.loop = true;
 
@@ -95,6 +94,7 @@ bool EnemyGround::Update()
 
 		alive = true;
 		isDead = false;
+		deathtimmer = 1;
 		kill = false;
 
 		col = false;
@@ -104,7 +104,18 @@ bool EnemyGround::Update()
 	}
 
 	if (deadanim == true) {
-
+		if (deathtimmer >= 0)
+		{
+			deathAnimEnemy.Reset();
+			//cout << "IS DEAD ";
+			currentAnimation = &deathAnimEnemy;
+			--deathtimmer;
+		}
+		else
+		{
+			isDead = false;
+			deathtimmer = 1;
+		}
 		
 	}
 

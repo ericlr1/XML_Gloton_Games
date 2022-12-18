@@ -50,6 +50,7 @@ public:
 	bool kill = false;
 	bool col = true;
 	bool isDead = false;
+	int deathtimmer;
 	bool follow = false;
 	bool deadanim = false;
 
