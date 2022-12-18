@@ -22,12 +22,11 @@ EnemyGround::EnemyGround() : Entity(EntityType::ENEMY_GROUND)
 	idleAnimEnemy.PushBack({ 0,0,50,50 });
 	idleAnimEnemy.PushBack({ 0,0,50,50 });
 	idleAnimEnemy.PushBack({ 0,0,50,50 });
-	idleAnimEnemy.PushBack({ 0,0,50,50 });
 	idleAnimEnemy.PushBack({ 50,0,50,50 });
 	idleAnimEnemy.PushBack({ 50,0,50,50 });
 	idleAnimEnemy.PushBack({ 50,0,50,50 });
 	idleAnimEnemy.PushBack({ 50,0,50,50 });
-	idleAnimEnemy.PushBack({ 50,0,50,50 });
+	
 	idleAnimEnemy.speed = 0.1f;
 	idleAnimEnemy.loop = true;
 
@@ -35,7 +34,15 @@ EnemyGround::EnemyGround() : Entity(EntityType::ENEMY_GROUND)
 	movingAnimEnemy.speed = 0.2f;
 	movingAnimEnemy.loop = true;
 
-	deathAnimEnemy.PushBack({ 0,0,50,50 });
+	deathAnimEnemy.PushBack({ 0,50,50,50 });
+	deathAnimEnemy.PushBack({ 50,50,50,50 });
+	deathAnimEnemy.PushBack({ 0,100,50,50 });
+	deathAnimEnemy.PushBack({ 50,100,50,50 });
+	deathAnimEnemy.PushBack({ 0,150,50,50 });
+	deathAnimEnemy.PushBack({ 50,150,50,50 });
+	deathAnimEnemy.PushBack({ 0,200,50,50 });
+	deathAnimEnemy.PushBack({ 50,200,50,50 });
+	deathAnimEnemy.PushBack({ 0,250,50,50 });
 	deathAnimEnemy.speed = 0.1f;
 	deathAnimEnemy.loop = true;
 
