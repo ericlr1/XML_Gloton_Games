@@ -42,6 +42,9 @@ bool Scene::Awake(pugi::xml_node& config)
 	enemy = (EnemyGround*)app->entityManager->CreateEntity(EntityType::ENEMY_GROUND);
 	enemy->parameters = config.child("enemy_ground");
 
+	enemy_fly = (EnemyFly*)app->entityManager->CreateEntity(EntityType::ENEMY_FLY);
+	enemy_fly->parameters = config.child("enemy_fly");
+
 	//L02: DONE 3: Instantiate the player using the entity manager
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 	player->parameters = config.child("player");	
@@ -96,13 +99,17 @@ bool Scene::Start()
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	if (app->physics->debug)
+	{
 
-	// Texture to highligh mouse position 
-	mouseTileTex = app->tex->Load("Assets/Maps/path_square.png");
 
-	// Texture to show path origin 
-	originTex = app->tex->Load("Assets/Maps/x_square.png");
+		// Texture to highligh mouse position 
+		mouseTileTex = app->tex->Load("Assets/Maps/path_square.png");
 
+		// Texture to show path origin 
+		originTex = app->tex->Load("Assets/Maps/x_square.png");
+
+	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -169,49 +176,50 @@ bool Scene::Update(float dt)
 	//Updates de los enemigos
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	//Pathfinding with the mouse
-	// L08: DONE 3: Test World to map method
-	int mouseX, mouseY;
-	app->input->GetMousePosition(mouseX, mouseY);
-
-	iPoint mouseTile = iPoint(0, 0);
-
-	mouseTile = app->map->WorldToMap(mouseX - app->render->camera.x, mouseY - app->render->camera.y);
-
-
-	//Convert again the tile coordinates to world coordinates to render the texture of the tile
-	iPoint highlightedTileWorld = app->map->MapToWorld(mouseTile.x, mouseTile.y);
-	app->render->DrawTexture(mouseTileTex, highlightedTileWorld.x, highlightedTileWorld.y);
-
-	//Test compute path function
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	if (app->physics->debug)
 	{
-		if (originSelected == true)
+		//Pathfinding with the mouse
+		// L08: DONE 3: Test World to map method
+		int mouseX, mouseY;
+		app->input->GetMousePosition(mouseX, mouseY);
+
+		iPoint mouseTile = iPoint(0, 0);
+
+		mouseTile = app->map->WorldToMap(mouseX - app->render->camera.x, mouseY - app->render->camera.y);
+
+
+		//Convert again the tile coordinates to world coordinates to render the texture of the tile
+		iPoint highlightedTileWorld = app->map->MapToWorld(mouseTile.x, mouseTile.y);
+		app->render->DrawTexture(mouseTileTex, highlightedTileWorld.x, highlightedTileWorld.y);
+
+		//Test compute path function
+		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 		{
-			app->path->CreatePath(origin, mouseTile);
-			originSelected = false;
+			if (originSelected == true)
+			{
+				app->path->CreatePath(origin, mouseTile);
+				originSelected = false;
+			}
+			else
+			{
+				origin = mouseTile;
+				originSelected = true;
+				app->path->ClearLastPath();
+			}
 		}
-		else
+
+		// L12: Get the latest calculated path and draw
+		const DynArray<iPoint>* path = app->path->GetLastPath();
+		for (uint i = 0; i < path->Count(); ++i)
 		{
-			origin = mouseTile;
-			originSelected = true;
-			app->path->ClearLastPath();
+			iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+			app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
 		}
+
+		// L12: Debug pathfinding
+		iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
+		app->render->DrawTexture(originTex, originScreen.x, originScreen.y);
 	}
-
-	// L12: Get the latest calculated path and draw
-	const DynArray<iPoint>* path = app->path->GetLastPath();
-	for (uint i = 0; i < path->Count(); ++i)
-	{
-		iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-		app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
-	}
-
-	// L12: Debug pathfinding
-	iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
-	app->render->DrawTexture(originTex, originScreen.x, originScreen.y);
-
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

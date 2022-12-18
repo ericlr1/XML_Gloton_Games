@@ -1,4 +1,4 @@
-#include "EnemyGround.h"
+#include "EnemyFly.h"
 #include "App.h"
 #include "Textures.h"
 #include "Audio.h"
@@ -15,7 +15,7 @@
 #include "Player.h"
 #include "Animation.h"
 
-EnemyGround::EnemyGround() : Entity(EntityType::ENEMY_GROUND)
+EnemyFly::EnemyFly() : Entity(EntityType::ENEMY_FLY)
 {
 	name.Create("Enemies");
 
@@ -27,7 +27,7 @@ EnemyGround::EnemyGround() : Entity(EntityType::ENEMY_GROUND)
 	idleAnimEnemy.PushBack({ 50,0,50,50 });
 	idleAnimEnemy.PushBack({ 50,0,50,50 });
 	idleAnimEnemy.PushBack({ 50,0,50,50 });
-	
+
 	idleAnimEnemy.speed = 0.1f;
 	idleAnimEnemy.loop = true;
 
@@ -57,27 +57,27 @@ EnemyGround::EnemyGround() : Entity(EntityType::ENEMY_GROUND)
 
 }
 
-EnemyGround::~EnemyGround() {
+EnemyFly::~EnemyFly() {
 
 }
 
-bool EnemyGround::Awake() {
+bool EnemyFly::Awake() {
 
-	position = { 160, 560 };
+	position = { 1600, 160 };
 	//texturePath = parameters.child("enemy_ground").attribute("texturepath").as_string();
-	texturePath = "Assets/Textures/enemyAnimation.png";
+	texturePath = "Assets/Textures/enemyFlyAnimation.png";
 
 	enemyFxPath = "Assets/Audio/Fx/enemy.wav";
 
 	return true;
 }
 
-bool EnemyGround::Start()
+bool EnemyFly::Start()
 {
 	texture = app->tex->Load(texturePath);
 	pathTileTex = app->tex->Load("Assets/Maps/MapMetadata.png");
 	audio = app->audio->LoadFx(enemyFxPath);
-	
+
 	isDead = false;
 	deathtimmer = 40;
 
@@ -86,26 +86,26 @@ bool EnemyGround::Start()
 	return true;
 }
 
-bool EnemyGround::Update()
+bool EnemyFly::Update()
 {
 	if (col)
 	{
 		pbody = app->physics->CreateCircle(position.x, position.y, 7.5, bodyType::DYNAMIC);
 		pbody->listener = this;
 		pbody->ctype = ColliderType::ENEMY;
-
+		pbody->body->SetGravityScale(0);
 
 		LOG("PosX: %d", position.x + (8 * 2));
 		LOG("PosY: %d", position.y + (8 * 2));
 
 		//Sensor de si el player está cerca
-		sensor = app->physics->CreateRectangleSensor(position.x + (8 * 2), position.y + (8 * 2), 250, 100, bodyType::KINEMATIC);
+		sensor = app->physics->CreateRectangleSensor(position.x + (8 * 2), position.y + (8 * 2), 250, 250, bodyType::KINEMATIC);
 		sensor->listener = this;
 		sensor->ctype = ColliderType::SENSOR;
 
 		//Collider para matar al enemigo saltando sobre él
-		Kill = app->physics->CreateRectangleSensor(position.x, position.y + (15), 10, 20, bodyType::KINEMATIC);
-		Kill->ctype = ColliderType::KILLWALK;
+		Kill = app->physics->CreateRectangleSensor(position.x, position.y + (20), 30, 10, bodyType::KINEMATIC);
+		Kill->ctype = ColliderType::KILLFLY;
 
 		pbody->GetPosition(WalkPosX, WalkPosY);
 
@@ -115,7 +115,7 @@ bool EnemyGround::Update()
 
 		col = false;
 		deadanim = false;
-	
+
 	}
 
 	if (deadanim == true) {
@@ -126,7 +126,7 @@ bool EnemyGround::Update()
 			this->currentAnimation->Update();
 			app->render->DrawTexture(texture, this->position.x-7, this->position.y-20, &die, 1.0f, NULL, NULL, NULL, flip);
 		}
-		
+
 	}
 
 
@@ -164,6 +164,8 @@ bool EnemyGround::Update()
 			app->render->DrawTexture(texture, this->position.x-7, this->position.y-20, &r, 1.0f, NULL, NULL, NULL, flip);
 		}
 
+
+
 		if (app->physics->debug)
 		{
 			const DynArray<iPoint>* path = app->path->GetLastPath();
@@ -187,12 +189,12 @@ bool EnemyGround::Update()
 			//app->audio->PlayFx(audio);
 			isDead = true;
 			deadanim = true;
-			
-			
+
+
 		}
 
 		if (follow) {
-			
+
 			LOG("FOLLOWING------------------------------------------------------------------");
 
 			app->path->CreatePath(enemy, player);
@@ -203,26 +205,30 @@ bool EnemyGround::Update()
 			{
 				iPoint pos = app->map->MapToWorld(path->At(1)->x, path->At(1)->y);
 
+				float32 speed = 0.05;
 
-				float32 speed = 0.6f;
-
-				/*if (e.y < pos.y) {
-					pbody->body->SetLinearVelocity({ 0, speed });
-				}*/
-
-				if (e.x < pos.x) {
-					LOG("-");
-					pbody->body->SetLinearVelocity({ speed, 5.0f });
+				if (e.y < pos.y) {
+					pbody->body->SetLinearVelocity({ 0, speed * 20 });
+					LOG("POS Y -");
+					this->currentAnimation = &idleAnimEnemy;
 				}
 
-				//if (e.y > pos.y) {
-				//	//pbody->body->ApplyForce({0, -4}, {(float32)position.x, (float32)position.y}, true);
-				//	pbody->body->SetLinearVelocity({ 0, -speed });
-				//}
+				if (e.x < pos.x) {
+					pbody->body->ApplyForceToCenter({ speed, 0 }, true);
+					LOG("POS X +");
+					this->currentAnimation = &idleAnimEnemy;
+				}
+
+				if (e.y > pos.y) {
+					pbody->body->ApplyForceToCenter({ 0, -speed }, true);
+					LOG("POS Y +");
+					this->currentAnimation = &idleAnimEnemy;
+				}
 
 				if (e.x > pos.x) {
-					LOG("+");
-					pbody->body->SetLinearVelocity({ -speed, 5.0f });
+					pbody->body->ApplyForceToCenter({ -speed, 0 }, true);
+					LOG("POS X -");
+					this->currentAnimation = &idleAnimEnemy;
 				}
 			}
 		}
@@ -234,10 +240,12 @@ bool EnemyGround::Update()
 		Kill->body->SetTransform(vec2, 0);
 	}
 
+
+
 	return true;
 }
 
-bool EnemyGround::CleanUp()
+bool EnemyFly::CleanUp()
 {
 	if (!isDead) {
 		pbody->body->GetWorld()->DestroyBody(pbody->body);
@@ -248,7 +256,7 @@ bool EnemyGround::CleanUp()
 }
 
 // L07 DONE 6: Define OnCollision function for the player. Check the virtual function on Entity class
-void EnemyGround::OnCollision(PhysBody* physA, PhysBody* physB) {
+void EnemyFly::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 	switch (physB->ctype)
 	{
@@ -262,7 +270,7 @@ void EnemyGround::OnCollision(PhysBody* physA, PhysBody* physB) {
 	}
 }
 
-void EnemyGround::EndContact(PhysBody* physA, PhysBody* physB) {
+void EnemyFly::EndContact(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
