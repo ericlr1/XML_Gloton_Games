@@ -14,7 +14,7 @@ public:
 	bool pingpong = false;
 	int totalFrames = 0;
 
-private:
+public:
 	float currentFrame = 0.0f;
 
 	int loopCount = 0;

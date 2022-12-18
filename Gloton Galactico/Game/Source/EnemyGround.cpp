@@ -13,6 +13,7 @@
 #include "Map.h"
 #include "Pathfinding.h"
 #include "Player.h"
+#include "Animation.h"
 
 EnemyGround::EnemyGround() : Entity(EntityType::ENEMY_GROUND)
 {
@@ -35,14 +36,23 @@ EnemyGround::EnemyGround() : Entity(EntityType::ENEMY_GROUND)
 	movingAnimEnemy.loop = true;
 
 	deathAnimEnemy.PushBack({ 0,50,50,50 });
+	deathAnimEnemy.PushBack({ 0,50,50,50 });
+	deathAnimEnemy.PushBack({ 50,50,50,50 });
 	deathAnimEnemy.PushBack({ 50,50,50,50 });
 	deathAnimEnemy.PushBack({ 0,100,50,50 });
+	deathAnimEnemy.PushBack({ 0,100,50,50 });
+	deathAnimEnemy.PushBack({ 50,100,50,50 });
 	deathAnimEnemy.PushBack({ 50,100,50,50 });
 	deathAnimEnemy.PushBack({ 0,150,50,50 });
+	deathAnimEnemy.PushBack({ 0,150,50,50 });
+	deathAnimEnemy.PushBack({ 50,150,50,50 });
 	deathAnimEnemy.PushBack({ 50,150,50,50 });
 	deathAnimEnemy.PushBack({ 0,200,50,50 });
-	
-	deathAnimEnemy.speed = 0.1f;
+	deathAnimEnemy.PushBack({ 0,200,50,50 });
+	deathAnimEnemy.PushBack({ 0,200,50,50 });
+	deathAnimEnemy.PushBack({ 0,200,50,50 });
+	deathAnimEnemy.PushBack({ 0,200,50,50 });
+	deathAnimEnemy.speed = 0.0001f;
 	deathAnimEnemy.loop = true;
 
 }
@@ -57,7 +67,7 @@ bool EnemyGround::Awake() {
 	//texturePath = parameters.child("enemy_ground").attribute("texturepath").as_string();
 	texturePath = "Assets/Textures/enemyAnimation.png";
 
-	enemyFxPath = parameters.attribute("enemyFxPath").as_string();
+	enemyFxPath = "Assets/Audio/Fx/enemy.wav";
 
 	return true;
 }
@@ -66,7 +76,7 @@ bool EnemyGround::Start()
 {
 	texture = app->tex->Load(texturePath);
 	pathTileTex = app->tex->Load("Assets/Maps/MapMetadata.png");
-	
+	audio = app->audio->LoadFx(enemyFxPath);
 	
 	isDead = false;
 	deathtimmer = 40;
@@ -109,11 +119,11 @@ bool EnemyGround::Update()
 
 	if (deadanim == true) {
 
-		if (deathtimmer >= 0)
-		{
-			deathAnimEnemy.Reset();
+		if (currentAnimation->currentFrame < 2) {
 			currentAnimation = &deathAnimEnemy;
-			--deathtimmer;
+			SDL_Rect die = currentAnimation->GetCurrentFrame();
+			currentAnimation->Update();
+			app->render->DrawTexture(texture, position.x - 19, position.y - 19, &die, flip);
 		}
 		
 	}
@@ -152,7 +162,7 @@ bool EnemyGround::Update()
 		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y);
 
 		if (alive == true) {
-			app->render->DrawTexture(texture, this->position.x - 12, this->position.y - 11, &r, flip);
+			app->render->DrawTexture(texture, this->position.x - 25, this->position.y - 38, &r, flip);
 		}
 
 		if (app->physics->debug)
@@ -170,6 +180,7 @@ bool EnemyGround::Update()
 
 		if (kill)
 		{
+			app->audio->PlayFx(audio);
 			alive = false;
 			pbody->body->GetWorld()->DestroyBody(pbody->body);
 			sensor->body->GetWorld()->DestroyBody(sensor->body);
@@ -177,7 +188,7 @@ bool EnemyGround::Update()
 			//app->audio->PlayFx(audio);
 			isDead = true;
 			deadanim = true;
-			app->audio->PlayFx(enemyFxId);
+			
 			
 		}
 

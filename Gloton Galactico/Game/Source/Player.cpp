@@ -101,7 +101,8 @@ bool Player::Awake() {
 	texturePath = parameters.attribute("texturepath").as_string();
 	vidaPath = parameters.attribute("vidapath").as_string();
 	hitFxPath = parameters.attribute("hitFxPath").as_string();
-	jumpFxPath = parameters.attribute("jumpFxPath").as_string();
+	//jumpFxPath = parameters.attribute("jumpFxPath").as_string();
+	jumpFxPath = "Assets/Audio/Fx/jump.wav";
 
 	return true;
 }
@@ -254,6 +255,11 @@ bool Player::Update()
 			vel = b2Vec2(speed, -GRAVITY_Y);
 			rotar = SDL_RendererFlip::SDL_FLIP_NONE;
 			currentAnimation = &runningAnimation;
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
+		{
+			app->audio->PlayFx(jumpFxId);
 		}
 
 		if (numJumps < 2)
