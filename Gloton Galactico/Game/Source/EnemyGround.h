@@ -55,7 +55,9 @@ public:
 	bool deadanim = false;
 
 	const char* audioPath;
+	const char* enemyFxPath;
 	int audio;
+	int enemyFxId;
 
 private:
 	SDL_Texture* texture;

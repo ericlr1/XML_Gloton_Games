@@ -57,6 +57,8 @@ bool EnemyGround::Awake() {
 	//texturePath = parameters.child("enemy_ground").attribute("texturepath").as_string();
 	texturePath = "Assets/Textures/enemyAnimation.png";
 
+	enemyFxPath = parameters.attribute("enemyFxPath").as_string();
+
 	return true;
 }
 
@@ -175,7 +177,7 @@ bool EnemyGround::Update()
 			//app->audio->PlayFx(audio);
 			isDead = true;
 			deadanim = true;
-			
+			app->audio->PlayFx(enemyFxId);
 			
 		}
 
