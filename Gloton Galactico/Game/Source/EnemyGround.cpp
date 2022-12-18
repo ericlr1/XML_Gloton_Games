@@ -18,15 +18,24 @@ EnemyGround::EnemyGround() : Entity(EntityType::ENEMY_GROUND)
 {
 	name.Create("Enemies");
 
-	idleAnimEnemy.PushBack({ 0,0,16,16 });
+	idleAnimEnemy.PushBack({ 0,0,50,50 });
+	idleAnimEnemy.PushBack({ 0,0,50,50 });
+	idleAnimEnemy.PushBack({ 0,0,50,50 });
+	idleAnimEnemy.PushBack({ 0,0,50,50 });
+	idleAnimEnemy.PushBack({ 0,0,50,50 });
+	idleAnimEnemy.PushBack({ 50,0,50,50 });
+	idleAnimEnemy.PushBack({ 50,0,50,50 });
+	idleAnimEnemy.PushBack({ 50,0,50,50 });
+	idleAnimEnemy.PushBack({ 50,0,50,50 });
+	idleAnimEnemy.PushBack({ 50,0,50,50 });
 	idleAnimEnemy.speed = 0.1f;
 	idleAnimEnemy.loop = true;
 
-	movingAnimEnemy.PushBack({ 0,0,16,16 });
+	movingAnimEnemy.PushBack({ 0,0,50,50 });
 	movingAnimEnemy.speed = 0.2f;
 	movingAnimEnemy.loop = true;
 
-	deathAnimEnemy.PushBack({ 0,0,16,16 });
+	deathAnimEnemy.PushBack({ 0,0,50,50 });
 	deathAnimEnemy.speed = 0.1f;
 	deathAnimEnemy.loop = true;
 
@@ -40,7 +49,7 @@ bool EnemyGround::Awake() {
 
 	position = { 160, 560 };
 	//texturePath = parameters.child("enemy_ground").attribute("texturepath").as_string();
-	texturePath = "Assets/Textures/enemy.png";
+	texturePath = "Assets/Textures/enemyAnimation.png";
 
 	return true;
 }
