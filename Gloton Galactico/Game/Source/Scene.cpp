@@ -164,13 +164,6 @@ bool Scene::Update(float dt)
 	// Draw map
 	
 	app->map->Draw();
-	
-	
-	//Debug draws - IA
-	if (app->physics->debug)
-	{
-		app->render->DrawRectangle({player->position.x - 94, player->position.y - 94, 200, 200}, 188, 0, 0, 100, false, true);
-	}
 
 
 	//Updates de los enemigos

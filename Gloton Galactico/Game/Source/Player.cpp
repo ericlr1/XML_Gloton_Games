@@ -363,11 +363,6 @@ bool Player::Update()
 
 	//Debug controls
 	
-	//Crear a un Ground Enemy
-	if (app->input->GetKey(SDL_SCANCODE_X) == KEY_DOWN)
-	{
-
-	}
 	//Empezar desde el inicio del nivel 1
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
@@ -458,7 +453,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			app->scene->enemy->kill = true;
 			app->scene->enemy->deadanim = true;
 			break;
-		case ColliderType::KILLFLY:		//Collider para matar al enemigo que anda
+		case ColliderType::KILLFLY:			//Collider para matar al enemigo que vuela
 			app->scene->enemy_fly->kill = true;
 			app->scene->enemy_fly->deadanim = true;
 			break;

@@ -8,7 +8,9 @@
 	<scene />
 	<scene />
 	<entitymanager>
-		<player x="43" y="659" vidas="3" godMode="false" />
+		<player x="237" y="547" vidas="3" godMode="false" />
+		<ground_enemy x="143" y="552" />
+		<fly_enemy x="1584" y="143" />
 	</entitymanager>
 	<:anonymous />
 	<map />
