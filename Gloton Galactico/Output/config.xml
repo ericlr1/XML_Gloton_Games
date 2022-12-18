@@ -32,6 +32,8 @@
 
    
     <enemy_ground x="208" y="535" texturepath="Assets/Textures/enemy.png"/>
+    
+    <enemy_fly x="1600" y="160" texturepath="Assets/Textures/enemyFly.png"/>
 
     
     

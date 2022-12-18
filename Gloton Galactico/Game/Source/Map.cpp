@@ -89,7 +89,7 @@ bool Map::CreateWalkabilityMapFly(int& width, int& height, uchar** buffer) const
     {
         MapLayer* layer = item->data;
 
-        if (!layer->properties.GetProperty("NavigationWalk")->value)
+        if (!layer->properties.GetProperty("NavigationFly")->value)
             continue;
 
         uchar* map = new uchar[layer->width * layer->height];
@@ -106,7 +106,7 @@ bool Map::CreateWalkabilityMapFly(int& width, int& height, uchar** buffer) const
 
                 //if (tileset != NULL)
                 //{
-                if (tileId == 16)
+                if (tileId == 185)
                     map[i] = 1;
                 else
                     map[i] = 0;

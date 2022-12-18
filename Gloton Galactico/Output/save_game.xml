@@ -9,7 +9,6 @@
 	<scene />
 	<entitymanager>
 		<player x="43" y="659" vidas="3" godMode="false" />
-    <ground_enemy x="228" y="1090" />
 	</entitymanager>
 	<:anonymous />
 	<map />

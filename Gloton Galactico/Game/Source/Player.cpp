@@ -101,7 +101,8 @@ bool Player::Awake() {
 	texturePath = parameters.attribute("texturepath").as_string();
 	vidaPath = parameters.attribute("vidapath").as_string();
 	hitFxPath = parameters.attribute("hitFxPath").as_string();
-	jumpFxPath = parameters.attribute("jumpFxPath").as_string();
+	//jumpFxPath = parameters.attribute("jumpFxPath").as_string();
+	jumpFxPath = "Assets/Audio/Fx/jump.wav";
 
 	return true;
 }
@@ -391,14 +392,14 @@ bool Player::Update()
 			Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
 		}
 	}
-	if (app->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+	/*if (app->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 	{
 		Shoot();
 	}
 	if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
 	{
 		app->scene->enemy->follow = true;
-	}
+	}*/
 
 	if (bala != NULL)
 	{
@@ -431,10 +432,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		case ColliderType::DEATH:
 			LOG("Collision DEATH");
 			app->audio->PlayFx(deathFxId);
-			if (physB->body->GetWorldCenter().y + 32 < position.y) //Comprobación de que el collider está por debajo, es decir es el suelo y no el techo
-			{
-				on_floor = true;
-			}
 			if (godMode == false)
 			{
 				is_dead = true;
@@ -443,15 +440,27 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		case ColliderType::UNKNOWN:
 			LOG("Collision UNKNOWN");
 			break;
+		case ColliderType::ENEMY:
+			LOG("Collision ENEMY");
+			app->audio->PlayFx(deathFxId);
+			if (godMode == false)
+			{
+				is_dead = true;
+			}
+			break;
 		case ColliderType::WIN:
 			LOG("Collision WIN");
 			app->fadetoblack->fadetoblack((Module*)app->scene, (Module*)app->scene, 60);
 			Teleport(parameters.attribute("x").as_int(), parameters.attribute("y").as_int());
 			lv2 = true;
 			break;
-		case ColliderType::KILLWALK:		//Collider para matar al enemigo
+		case ColliderType::KILLWALK:		//Collider para matar al enemigo que anda
 			app->scene->enemy->kill = true;
 			app->scene->enemy->deadanim = true;
+			break;
+		case ColliderType::KILLFLY:		//Collider para matar al enemigo que anda
+			app->scene->enemy_fly->kill = true;
+			app->scene->enemy_fly->deadanim = true;
 			break;
 			
 	}
