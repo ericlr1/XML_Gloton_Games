@@ -15,7 +15,7 @@ Glotón Galáctico: A Space Odyssey is a 2D platformer which experiments with th
  - Load/Save game state
  - Fade-in and fade-out transitions
  - Two playable levels
- - Walking enemy type
+ - Enemies
  - Path Finding
  - Enemy Animations
  - Sound Efects
